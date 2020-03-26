@@ -38,7 +38,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 const element = <HelloWorld />;
 
 ReactDOM.render(element, document.getElementById('contents')); */
-var issues = [{
+var initialIssues = [{
   id: 1,
   status: 'New',
   owner: "Maven",
@@ -105,15 +105,21 @@ var IssueTable = /*#__PURE__*/function (_React$Component3) {
   var _super3 = _createSuper(IssueTable);
 
   function IssueTable() {
+    var _this;
+
     _classCallCheck(this, IssueTable);
 
-    return _super3.apply(this, arguments);
+    _this = _super3.call(this);
+    _this.state = {
+      issues: initialIssues
+    };
+    return _this;
   }
 
   _createClass(IssueTable, [{
     key: "render",
     value: function render() {
-      var issueRows = issues.map(function (issue) {
+      var issueRows = this.state.issues.map(function (issue) {
         return /*#__PURE__*/React.createElement(IssueRow, {
           key: issue.id,
           issue: issue

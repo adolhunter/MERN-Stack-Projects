@@ -16,7 +16,7 @@ const element = <HelloWorld />;
 ReactDOM.render(element, document.getElementById('contents')); */
 
 
-const issues = [
+const initialIssues = [
     {
         id: 1, status: 'New', owner: "Maven", effort: 5,
         created: new Date('03/04/2012'), due: undefined,
@@ -58,8 +58,14 @@ class IssueRow extends React.Component {
 
 
 class IssueTable extends React.Component {
+    constructor() {
+        super();
+        this.state = {issues: initialIssues};
+    }
+
+
     render() {
-        const issueRows = issues.map(issue => <IssueRow key={issue.id} issue={issue}/>);
+        const issueRows = this.state.issues.map(issue => <IssueRow key={issue.id} issue={issue}/>);
         return (
             <table className="bordered-table">
                 <thead>
