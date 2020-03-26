@@ -22,33 +22,105 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var HelloWorld = /*#__PURE__*/function (_React$Component) {
-  _inherits(HelloWorld, _React$Component);
+/* class HelloWorld extends React.Component{
+    render(){
+        const continents = ['Africa', 'America','Asia','Australia','Europe'];
+        const helloContinents = Array.from(continents, c => `Hello ${c}!`);
+        const message = helloContinents.join(" ");
+        return (
+            <div title="Outer div">
+                <h1>{message}</h1>
+            </div>
+        );
+    }
+}
 
-  var _super = _createSuper(HelloWorld);
+const element = <HelloWorld />;
 
-  function HelloWorld() {
-    _classCallCheck(this, HelloWorld);
+ReactDOM.render(element, document.getElementById('contents')); */
+var IssueFilter = /*#__PURE__*/function (_React$Component) {
+  _inherits(IssueFilter, _React$Component);
+
+  var _super = _createSuper(IssueFilter);
+
+  function IssueFilter() {
+    _classCallCheck(this, IssueFilter);
 
     return _super.apply(this, arguments);
   }
 
-  _createClass(HelloWorld, [{
+  _createClass(IssueFilter, [{
     key: "render",
     value: function render() {
-      var continents = ['Africa', 'America', 'Asia', 'Australia', 'Europe'];
-      var helloContinents = Array.from(continents, function (c) {
-        return "Hello ".concat(c, "!");
-      });
-      var message = helloContinents.join(" ");
-      return /*#__PURE__*/React.createElement("div", {
-        title: "Outer div"
-      }, /*#__PURE__*/React.createElement("h1", null, message));
+      return /*#__PURE__*/React.createElement("div", null, "This is a placeholder for the IssueFilter.");
     }
   }]);
 
-  return HelloWorld;
+  return IssueFilter;
 }(React.Component);
 
-var element = /*#__PURE__*/React.createElement(HelloWorld, null);
+var IssueTable = /*#__PURE__*/function (_React$Component2) {
+  _inherits(IssueTable, _React$Component2);
+
+  var _super2 = _createSuper(IssueTable);
+
+  function IssueTable() {
+    _classCallCheck(this, IssueTable);
+
+    return _super2.apply(this, arguments);
+  }
+
+  _createClass(IssueTable, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/React.createElement("div", null, "This is a placeholder for the issues.");
+    }
+  }]);
+
+  return IssueTable;
+}(React.Component);
+
+var IssueAdd = /*#__PURE__*/function (_React$Component3) {
+  _inherits(IssueAdd, _React$Component3);
+
+  var _super3 = _createSuper(IssueAdd);
+
+  function IssueAdd() {
+    _classCallCheck(this, IssueAdd);
+
+    return _super3.apply(this, arguments);
+  }
+
+  _createClass(IssueAdd, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/React.createElement("div", null, "This is a placeholder for the IssueAdd.");
+    }
+  }]);
+
+  return IssueAdd;
+}(React.Component);
+
+var IssueList = /*#__PURE__*/function (_React$Component4) {
+  _inherits(IssueList, _React$Component4);
+
+  var _super4 = _createSuper(IssueList);
+
+  function IssueList() {
+    _classCallCheck(this, IssueList);
+
+    return _super4.apply(this, arguments);
+  }
+
+  _createClass(IssueList, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Issue Tracker"), /*#__PURE__*/React.createElement(IssueFilter, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueTable, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueAdd, null));
+    }
+  }]);
+
+  return IssueList;
+}(React.Component);
+
+var element = /*#__PURE__*/React.createElement(IssueList, null);
 ReactDOM.render(element, document.getElementById('contents'));
