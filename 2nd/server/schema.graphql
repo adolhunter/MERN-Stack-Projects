@@ -1,5 +1,28 @@
+  """         <th>ID</th>
+<th>Status</th>
+<th>Owner</th>
+<th>Created</th>
+<th>Effort</th>
+<th>Due Date</th>
+<th>Title</th> """
+
+type Issue {
+    id: Int!
+    title: String!
+    status: String!
+    owner: String
+    effort: Int
+    created: String!
+    due: String
+}
+
+##### top level declarations
+
+
+
 type Query {
     about: String!
+    issueList: [Issue!]!
 }
 type Mutation {
    setAboutMessage(message: String!): String
