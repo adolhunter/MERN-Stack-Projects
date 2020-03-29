@@ -1,31 +1,41 @@
-  """         <th>ID</th>
+"""
+         <th>ID</th>
 <th>Status</th>
 <th>Owner</th>
 <th>Created</th>
 <th>Effort</th>
 <th>Due Date</th>
-<th>Title</th> """
-
+<th>Title</th>
+"""
 scalar GraphQLDate
 
+"Toned down Issue, used as inputs, without server generated values."
+input IssueInputs {
+  title: String!
+  "Optional, if not supplied, will be set to 'New'"
+  status: String 
+  owner: String
+  effort: Int
+  due: GraphQLDate 
+}
+
 type Issue {
-    id: Int!
-    title: String!
-    status: String!
-    owner: String
-    effort: Int
-    created: GraphQLDate!
-    due: GraphQLDate
+  id: Int!
+  title: String!
+  status: String!
+  owner: String
+  effort: Int
+  created: GraphQLDate!
+  due: GraphQLDate
 }
 
 ##### top level declarations
 
-
-
 type Query {
-    about: String!
-    issueList: [Issue!]!
+  about: String!
+  issueList: [Issue!]!
 }
 type Mutation {
-   setAboutMessage(message: String!): String
+  setAboutMessage(message: String!): String
+  issueAdd(issue: IssueInputs!): Issue! 
 }
