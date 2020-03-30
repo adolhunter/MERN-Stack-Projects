@@ -1,19 +1,3 @@
-/* class HelloWorld extends React.Component{
-    render(){
-        const continents = ['Africa', 'America','Asia','Australia','Europe'];
-        const helloContinents = Array.from(continents, c => `Hello ${c}!`);
-        const message = helloContinents.join(" ");
-        return (
-            <div title="Outer div">
-                <h1>{message}</h1>
-            </div>
-        );
-    }
-}
-
-const element = <HelloWorld />;
-
-ReactDOM.render(element, document.getElementById('contents')); */
 const dateRegex = new RegExp("^\\d\\d\\d\\d-\\d\\d-\\d\\d");
 
 function jsonDateReceiver(key, value) {
@@ -23,26 +7,9 @@ function jsonDateReceiver(key, value) {
 
 class IssueFilter extends React.Component {
   render() {
-    return <div>This is a placeholder for the IssueFilter.</div>;
+    return <div>This is a placeholder for the issue filter.</div>;
   }
 }
-
-/* class IssueRow extends React.Component {
-    render() {
-        const issue = this.props.issue;
-        return (
-            <tr>
-                <td>{issue.id}</td>
-                <td>{issue.status}</td>
-                <td>{issue.owner}</td>
-                <td>{issue.created.toDateString()}</td>
-                <td>{issue.effort}</td>
-                <td>{issue.due ? issue.due.toDateString() : ''}</td>
-                <td>{issue.title}</td>
-            </tr>
-        )
-    }
-} */
 
 function IssueRow(props) {
   const issue = props.issue;
@@ -63,6 +30,7 @@ function IssueTable(props) {
   const issueRows = props.issues.map(issue => (
     <IssueRow key={issue.id} issue={issue} />
   ));
+
   return (
     <table className="bordered-table">
       <thead>
@@ -135,6 +103,31 @@ class IssueAdd extends React.Component {
   }
 }
 
+async function graphQLFetch(query, variables = {}) {
+  try {
+    const response = await fetch("/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query, variables })
+    });
+    const body = await response.text();
+    const result = JSON.parse(body, jsonDateReceiver);
+
+    if (result.errors) {
+      const error = result.errors[0];
+      if (error.extensions.code == "BAD_USER_INPUT") {
+        const details = error.extensions.exception.errors.join("\n");
+        alert(`${error.message}:\n${details}`);
+      } else {
+        alert(`${error.extensions.code}:${error.message}`);
+      }
+    }
+    return result.data;
+  } catch (e) {
+    alert(`Error in sending data to the server: ${e.message}`);
+  }
+}
+
 class IssueList extends React.Component {
   constructor() {
     super();
@@ -154,14 +147,10 @@ class IssueList extends React.Component {
             }
         }`;
 
-    const response = await fetch("/graphql", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query })
-    });
-    const body = await response.text();
-    const result = JSON.parse(body, jsonDateReceiver);
-    this.setState({ issues: result.data.issueList });
+    const data = await graphQLFetch(query);
+    if (data) {
+      this.setState({ issues: data.issueList });
+    }
   }
 
   async createIssue(issue) {
@@ -170,13 +159,10 @@ class IssueList extends React.Component {
             id
         }
     }`;
-
-    const response = await fetch("/graphql", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query, variables: { issue } })
-    });
-    this.loadData();
+    const data = await graphQLFetch(query, { issue });
+    if (data) {
+      this.loadData();
+    }
   }
 
   render() {
