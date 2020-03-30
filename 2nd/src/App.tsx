@@ -1,22 +1,6 @@
-/* class HelloWorld extends React.Component{
-    render(){
-        const continents = ['Africa', 'America','Asia','Australia','Europe'];
-        const helloContinents = Array.from(continents, c => `Hello ${c}!`);
-        const message = helloContinents.join(" ");
-        return (
-            <div title="Outer div">
-                <h1>{message}</h1>
-            </div>
-        );
-    }
-}
-
-const element = <HelloWorld />;
-
-ReactDOM.render(element, document.getElementById('contents')); */
 const dateRegex = new RegExp("^\\d\\d\\d\\d-\\d\\d-\\d\\d");
 
-function jsonDateReceiver(key, value) {
+function jsonDateReceiver(key:any, value:any):Date|Number {
   if (dateRegex.test(value)) return new Date(value);
   return value;
 }
@@ -27,24 +11,22 @@ class IssueFilter extends React.Component {
   }
 }
 
-/* class IssueRow extends React.Component {
-    render() {
-        const issue = this.props.issue;
-        return (
-            <tr>
-                <td>{issue.id}</td>
-                <td>{issue.status}</td>
-                <td>{issue.owner}</td>
-                <td>{issue.created.toDateString()}</td>
-                <td>{issue.effort}</td>
-                <td>{issue.due ? issue.due.toDateString() : ''}</td>
-                <td>{issue.title}</td>
-            </tr>
-        )
-    }
-} */
+type IssueObject = {
+  id: number,
+  status: string,
+  owner: string,
+  created: Date;
+  effort: number,
+  due?:Date,
+  title: string,
+  key: number
+}
 
-function IssueRow(props) {
+type rowProps = {
+  issue: IssueObject
+}
+
+function IssueRow(props : rowProps) {
   const issue = props.issue;
   return (
     <tr>
@@ -59,7 +41,11 @@ function IssueRow(props) {
   );
 }
 
-function IssueTable(props) {
+type TableProps = {
+  issues: IssueObject[];
+}
+
+function IssueTable(props: TableProps) {
   const issueRows = props.issues.map(issue => (
     <IssueRow key={issue.id} issue={issue} />
   ));
@@ -81,37 +67,18 @@ function IssueTable(props) {
   );
 }
 
-/* class IssueTable extends React.Component {
-    render() {
-        const issueRows = this.props.issues.map(issue => <IssueRow key={issue.id} issue={issue} />);
-        return (
-            <table className="bordered-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Status</th>
-                        <th>Owner</th>
-                        <th>Created</th>
-                        <th>Effort</th>
-                        <th>Due Date</th>
-                        <th>Title</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {issueRows}
-                </tbody>
-            </table>
-        );
-    }
-} */
+type AddProps = {
+  createIssue: Function,
+}
 
-class IssueAdd extends React.Component {
-  constructor() {
-    super();
+
+class IssueAdd extends React.Component<AddProps> {
+  constructor(props: AddProps) {
+    super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(e) {
+  handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = document.forms.issueAdd;
     const issue = {
@@ -135,9 +102,14 @@ class IssueAdd extends React.Component {
   }
 }
 
-class IssueList extends React.Component {
-  constructor() {
-    super();
+type ListState = {
+  issues: IssueObject[]
+}
+
+
+class IssueList extends React.Component<{},ListState> implements IssueList{
+  constructor({},issues: ListState) {
+    super({},issues);
     this.state = { issues: [] };
     this.createIssue = this.createIssue.bind(this);
   }
@@ -164,7 +136,7 @@ class IssueList extends React.Component {
     this.setState({ issues: result.data.issueList });
   }
 
-  async createIssue(issue) {
+  async createIssue(issue: IssueObject) {
     const query = `mutation issueAdd($issue:IssueInputs!) {
         issueAdd(issue: $issue) {
             id
