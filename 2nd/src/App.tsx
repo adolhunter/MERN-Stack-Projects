@@ -1,6 +1,6 @@
 const dateRegex = new RegExp("^\\d\\d\\d\\d-\\d\\d-\\d\\d");
 
-function jsonDateReceiver(key:any, value:any):Date|Number {
+function jsonDateReceiver(key: any, value: any): Date | Number {
   if (dateRegex.test(value)) return new Date(value);
   return value;
 }
@@ -12,21 +12,21 @@ class IssueFilter extends React.Component {
 }
 
 type IssueObject = {
-  id: number,
-  status: string,
-  owner: string,
+  id: number;
+  status: string;
+  owner: string;
   created: Date;
-  effort: number,
-  due?:Date,
-  title: string,
-  key: number
-}
+  effort: number;
+  due?: Date;
+  title: string;
+  key: number;
+};
 
 type rowProps = {
-  issue: IssueObject
-}
+  issue: IssueObject;
+};
 
-function IssueRow(props : rowProps) {
+function IssueRow(props: rowProps) {
   const issue = props.issue;
   return (
     <tr>
@@ -43,7 +43,7 @@ function IssueRow(props : rowProps) {
 
 type TableProps = {
   issues: IssueObject[];
-}
+};
 
 function IssueTable(props: TableProps) {
   const issueRows = props.issues.map(issue => (
@@ -68,9 +68,13 @@ function IssueTable(props: TableProps) {
 }
 
 type AddProps = {
-  createIssue: Function,
-}
+  createIssue: Function;
+};
 
+type AddForm = {
+  owner: any;
+  title: any;
+};
 
 class IssueAdd extends React.Component<AddProps> {
   constructor(props: AddProps) {
@@ -80,7 +84,7 @@ class IssueAdd extends React.Component<AddProps> {
 
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = document.forms.issueAdd;
+    const form = document.getElementById("issueAdd") as unknown as AddForm;
     const issue = {
       owner: form.owner.value,
       title: form.title.value,
@@ -93,7 +97,7 @@ class IssueAdd extends React.Component<AddProps> {
 
   render() {
     return (
-      <form name="issueAdd" onSubmit={this.handleSubmit}>
+      <form name="issueAdd" id="issueAdd" onSubmit={this.handleSubmit}>
         <input type="text" name="owner" placeholder="Owner" />
         <input type="text" name="title" placeholder="Title" />
         <button>Add</button>
@@ -103,13 +107,12 @@ class IssueAdd extends React.Component<AddProps> {
 }
 
 type ListState = {
-  issues: IssueObject[]
-}
+  issues: IssueObject[];
+};
 
-
-class IssueList extends React.Component<{},ListState> implements IssueList{
-  constructor({},issues: ListState) {
-    super({},issues);
+class IssueList extends React.Component<{}, ListState> implements IssueList {
+  constructor({}, issues: ListState) {
+    super({}, issues);
     this.state = { issues: [] };
     this.createIssue = this.createIssue.bind(this);
   }
