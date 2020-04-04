@@ -3,20 +3,12 @@ const fs = require('fs');
 const { ApolloServer, UserInputError } = require('apollo-server-express');
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
+const { MongoClient } = require("mongodb");
+
+const url = 'mongodb://localhost/issuetracker';
 
 let aboutMessage = "Issue Tracker API V1.0";
-
-const issueDB = [
-    {
-        id: 1, status: 'New', owner: 'Ravan', effort: 5,
-        created: new Date('01/16/2019'), due: undefined,
-        title: 'Error in console when clicking add'
-    }, {
-        id: 2, status: 'Assigned', owner: 'Eddie', effort: 14,
-        created: new Date('01/26/2019'), due: new Date('02/01/2019'),
-        title: 'Missing bottom border'
-    }
-];
+let db;
 
 const GraphQLDate = new GraphQLScalarType({
     name: 'GraphQLDate',
@@ -31,7 +23,7 @@ const GraphQLDate = new GraphQLScalarType({
     parseLiteral(ast) {
         if (ast.Kind == Kind.STRING) {
             const value = new Date(ast.value);
-            return isNaN(value)? undefined : value;
+            return isNaN(value) ? undefined : value;
         }
     },
 });
@@ -48,8 +40,9 @@ const resolvers = {
     GraphQLDate
 };
 
-function issueList() {
-    return issueDB
+async function issueList() {
+    const issues = await db.collection('issues').find({}).toArray();
+    return issues;
 }
 
 function setAboutMessage(_, { message }) {
@@ -65,16 +58,33 @@ function issueValidate(issue) {
         errors.push('Field "Owner" is required when status is "Assigned"');
     }
     if (errors.length > 0) {
-        throw new UserInputError("Invalid inputs(s)", {errors});
+        throw new UserInputError("Invalid inputs(s)", { errors });
     }
 }
 
-function issueAdd(_, { issue }) {
+async function getNextSequence(name) {
+    const result = await db.collection('counters').findOneAndUpdate(
+        { _id: name },
+        { $inc: { current: 1 } },
+        { returnOriginal: false },
+    );
+    return result.value.current;
+}
+
+async function issueAdd(_, { issue }) {
     issueValidate(issue);
     issue.created = new Date();
-    issue.id = issueDB.length + 1;
-    issueDB.push(issue);
-    return issue;
+    issue.id = await getNextSequence('issues');
+    const result = await db.collection('issues').insertOne(issue);
+    const savedIssue = await db.collection('issues').findOne({ _id: result.insertedId });
+    return savedIssue;
+}
+
+async function connectToDb() {
+    const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
+    console.log('Connected to MongoDB at', url);
+    db = client.db();
 }
 
 const server = new ApolloServer({
@@ -92,6 +102,13 @@ app.use(express.static('public'));
 
 server.applyMiddleware({ app, path: '/graphql' });
 
-app.listen(3000, () => {
-    console.log('app started');
-})
+(async function () {
+    try {
+        await connectToDb();
+        app.listen(3000, () => {
+            console.log('app started');
+        });
+    } catch (error) {
+        console.log('there is an error', error);
+    }
+})();

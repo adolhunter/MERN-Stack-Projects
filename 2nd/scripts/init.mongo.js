@@ -14,8 +14,10 @@ const issueDB = [
 db.issues.insertMany(issueDB);
 const count = db.issues.count();
 print('Inserted', count, 'issues');
+db.counters.remove({ _id: 'issues' })
+db.counters.insert({ _id: 'issues', current: count });
 
-db.issues.createIndex({id: 1}, {unique: true});
-db.issues.createIndex({status: 1});
-db.issues.createIndex({owner: 1});
-db.issues.createIndex({created: 1});
+db.issues.createIndex({ id: 1 }, { unique: true });
+db.issues.createIndex({ status: 1 });
+db.issues.createIndex({ owner: 1 });
+db.issues.createIndex({ created: 1 });
