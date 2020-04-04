@@ -88,7 +88,7 @@ async function connectToDb() {
 }
 
 const server = new ApolloServer({
-    typeDefs: fs.readFileSync("./server/schema.graphql", 'utf-8'),
+    typeDefs: fs.readFileSync("schema.graphql", 'utf-8'),
     resolvers,
     formatError: error => {
         console.log(error);
@@ -98,7 +98,6 @@ const server = new ApolloServer({
 
 
 const app = express();
-app.use(express.static('public'));
 
 server.applyMiddleware({ app, path: '/graphql' });
 
@@ -106,7 +105,7 @@ server.applyMiddleware({ app, path: '/graphql' });
     try {
         await connectToDb();
         app.listen(3000, () => {
-            console.log('app started');
+            console.log('API Server started');
         });
     } catch (error) {
         console.log('there is an error', error);
