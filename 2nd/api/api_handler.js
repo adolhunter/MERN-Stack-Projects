@@ -12,7 +12,7 @@ const resolvers = {
     issueList: issue.list,
   },
   Mutation: {
-    setAboutMessage: about.setAboutMessage,
+    setAboutMessage: about.setMessage,
     issueAdd: issue.add,
   },
   GraphQLDate,
@@ -34,4 +34,4 @@ function installHandler(app) {
   server.applyMiddleware({ app, path: '/graphql', cors: enableCors });
 }
 
-module.exports(installHandler);
+module.exports = { installHandler };
