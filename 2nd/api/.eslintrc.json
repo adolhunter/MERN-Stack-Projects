@@ -16,5 +16,8 @@
     },
     "rules": {
         "no-console": "off"
-    }
+    },
+    "plugins": [
+        "prettier"
+    ]
 }
