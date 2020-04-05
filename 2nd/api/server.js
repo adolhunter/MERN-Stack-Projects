@@ -19,27 +19,17 @@ const GraphQLDate = new GraphQLScalarType({
   },
   parseValue(value) {
     const dataValue = new Date(value);
-    return isNaN(dataValue) ? undefined : dataValue;
+    return Number.isNaN(dataValue.getTime()) ? undefined : dataValue;
   },
   parseLiteral(ast) {
-    if (ast.Kind == Kind.STRING) {
+    if (ast.Kind === Kind.STRING) {
       const value = new Date(ast.value);
-      return isNaN(value) ? undefined : value;
+      return Number.isNaN(value.getTime()) ? undefined : value;
     }
+    return undefined;
   },
 });
 
-const resolvers = {
-  Query: {
-    about: () => aboutMessage,
-    issueList,
-  },
-  Mutation: {
-    setAboutMessage,
-    issueAdd,
-  },
-  GraphQLDate,
-};
 
 async function issueList() {
   const issues = await db.collection('issues').find({}).toArray();
@@ -47,7 +37,8 @@ async function issueList() {
 }
 
 function setAboutMessage(_, { message }) {
-  return aboutMessage = message;
+  aboutMessage = message;
+  return aboutMessage;
 }
 
 function issueValidate(issue) {
@@ -74,10 +65,12 @@ async function getNextSequence(name) {
 
 async function issueAdd(_, { issue }) {
   issueValidate(issue);
-  issue.created = new Date();
-  issue.id = await getNextSequence('issues');
-  const result = await db.collection('issues').insertOne(issue);
-  const savedIssue = await db.collection('issues').findOne({ _id: result.insertedId });
+  const newIssue = { ...issue };
+  newIssue.created = new Date();
+  newIssue.id = await getNextSequence('issues');
+  const result = await db.collection('issues').insertOne(newIssue);
+  const savedIssue = await db.collection('issues')
+    .findOne({ _id: result.insertedId });
   return savedIssue;
 }
 
@@ -87,6 +80,18 @@ async function connectToDb() {
   console.log('Connected to MongoDB at', url);
   db = client.db();
 }
+
+const resolvers = {
+  Query: {
+    about: () => aboutMessage,
+    issueList,
+  },
+  Mutation: {
+    setAboutMessage,
+    issueAdd,
+  },
+  GraphQLDate,
+};
 
 const server = new ApolloServer({
   typeDefs: fs.readFileSync('schema.graphql', 'utf-8'),
@@ -100,14 +105,14 @@ const server = new ApolloServer({
 
 const app = express();
 
-const enableCors = (process.env.ENABLE_CORS || 'true') == 'true';
+const enableCors = (process.env.ENABLE_CORS || 'true') === 'true';
 console.log('CORS setting:', enableCors);
 
 server.applyMiddleware({ app, path: '/graphql', cors: enableCors });
 
 const port = process.env.API_SERVER_PORT || 3000;
 
-(async function () {
+(async function start() {
   try {
     await connectToDb();
     app.listen(port, () => {
