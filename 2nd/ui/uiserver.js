@@ -11,15 +11,15 @@ const env = { UI_API_ENDPOINT };
 const apiProxyTarget = process.env.API_PROXY_TARGET;
 
 if (apiProxyTarget) {
-    app.use('/graphql', createProxyMiddleware({ target: apiProxyTarget, changeOrigin: true}));
+  app.use('/graphql', createProxyMiddleware({ target: apiProxyTarget, changeOrigin: true }));
 }
 
 app.get('/env.js', (req, res) => {
-    res.send(`window.ENV = ${JSON.stringify(env)}`);
-})
+  res.send(`window.ENV = ${JSON.stringify(env)}`);
+});
 
 const port = process.env.UI_SERVER_PORT || 8000;
 
 app.listen(port, () => {
-    console.log(`UI started on port ${port}`);
+  console.log(`UI started on port ${port}`);
 });

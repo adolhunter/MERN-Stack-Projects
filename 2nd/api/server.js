@@ -4,116 +4,116 @@ require('dotenv').config();
 const { ApolloServer, UserInputError } = require('apollo-server-express');
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
-const { MongoClient } = require("mongodb");
+const { MongoClient } = require('mongodb');
 
 const url = process.env.DB_URL || 'mongodb://localhost/issuetracker';
 
-let aboutMessage = "Issue Tracker API V1.0";
+let aboutMessage = 'Issue Tracker API V1.0';
 let db;
 
 const GraphQLDate = new GraphQLScalarType({
-    name: 'GraphQLDate',
-    description: "a Date() type in GraphQL as a scalar",
-    serialize(value) {
-        return value.toISOString();
-    },
-    parseValue(value) {
-        const dataValue = new Date(value);
-        return isNaN(dataValue) ? undefined : dataValue;
-    },
-    parseLiteral(ast) {
-        if (ast.Kind == Kind.STRING) {
-            const value = new Date(ast.value);
-            return isNaN(value) ? undefined : value;
-        }
-    },
+  name: 'GraphQLDate',
+  description: 'a Date() type in GraphQL as a scalar',
+  serialize(value) {
+    return value.toISOString();
+  },
+  parseValue(value) {
+    const dataValue = new Date(value);
+    return isNaN(dataValue) ? undefined : dataValue;
+  },
+  parseLiteral(ast) {
+    if (ast.Kind == Kind.STRING) {
+      const value = new Date(ast.value);
+      return isNaN(value) ? undefined : value;
+    }
+  },
 });
 
 const resolvers = {
-    Query: {
-        about: () => aboutMessage,
-        issueList
-    },
-    Mutation: {
-        setAboutMessage,
-        issueAdd
-    },
-    GraphQLDate
+  Query: {
+    about: () => aboutMessage,
+    issueList,
+  },
+  Mutation: {
+    setAboutMessage,
+    issueAdd,
+  },
+  GraphQLDate,
 };
 
 async function issueList() {
-    const issues = await db.collection('issues').find({}).toArray();
-    return issues;
+  const issues = await db.collection('issues').find({}).toArray();
+  return issues;
 }
 
 function setAboutMessage(_, { message }) {
-    return aboutMessage = message;
+  return aboutMessage = message;
 }
 
 function issueValidate(issue) {
-    const errors = [];
-    if (issue.title.length < 3) {
-        errors.push('Field "title" must be at least 3 characters long.');
-    }
-    if (issue.status === 'Assigned' && !issue.owner) {
-        errors.push('Field "Owner" is required when status is "Assigned"');
-    }
-    if (errors.length > 0) {
-        throw new UserInputError("Invalid inputs(s)", { errors });
-    }
+  const errors = [];
+  if (issue.title.length < 3) {
+    errors.push('Field "title" must be at least 3 characters long.');
+  }
+  if (issue.status === 'Assigned' && !issue.owner) {
+    errors.push('Field "Owner" is required when status is "Assigned"');
+  }
+  if (errors.length > 0) {
+    throw new UserInputError('Invalid inputs(s)', { errors });
+  }
 }
 
 async function getNextSequence(name) {
-    const result = await db.collection('counters').findOneAndUpdate(
-        { _id: name },
-        { $inc: { current: 1 } },
-        { returnOriginal: false },
-    );
-    return result.value.current;
+  const result = await db.collection('counters').findOneAndUpdate(
+    { _id: name },
+    { $inc: { current: 1 } },
+    { returnOriginal: false },
+  );
+  return result.value.current;
 }
 
 async function issueAdd(_, { issue }) {
-    issueValidate(issue);
-    issue.created = new Date();
-    issue.id = await getNextSequence('issues');
-    const result = await db.collection('issues').insertOne(issue);
-    const savedIssue = await db.collection('issues').findOne({ _id: result.insertedId });
-    return savedIssue;
+  issueValidate(issue);
+  issue.created = new Date();
+  issue.id = await getNextSequence('issues');
+  const result = await db.collection('issues').insertOne(issue);
+  const savedIssue = await db.collection('issues').findOne({ _id: result.insertedId });
+  return savedIssue;
 }
 
 async function connectToDb() {
-    const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-    await client.connect();
-    console.log('Connected to MongoDB at', url);
-    db = client.db();
+  const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+  await client.connect();
+  console.log('Connected to MongoDB at', url);
+  db = client.db();
 }
 
 const server = new ApolloServer({
-    typeDefs: fs.readFileSync("schema.graphql", 'utf-8'),
-    resolvers,
-    formatError: error => {
-        console.log(error);
-        return error;
-    }
+  typeDefs: fs.readFileSync('schema.graphql', 'utf-8'),
+  resolvers,
+  formatError: (error) => {
+    console.log(error);
+    return error;
+  },
 });
 
 
 const app = express();
 
 const enableCors = (process.env.ENABLE_CORS || 'true') == 'true';
-console.log("CORS setting:", enableCors);
+console.log('CORS setting:', enableCors);
 
 server.applyMiddleware({ app, path: '/graphql', cors: enableCors });
 
 const port = process.env.API_SERVER_PORT || 3000;
 
 (async function () {
-    try {
-        await connectToDb();
-        app.listen(port, function () {
-            console.log(`API server started on port ${port}`);
-        });
-    } catch (error) {
-        console.log('there is an error', error);
-    }
-})();
+  try {
+    await connectToDb();
+    app.listen(port, () => {
+      console.log(`API server started on port ${port}`);
+    });
+  } catch (error) {
+    console.log('there is an error', error);
+  }
+}());
