@@ -4,7 +4,6 @@
 /* eslint "react/no-multi-comp": "off" */
 /* eslint "no-alert": "off" */
 
-
 const dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
 
 function jsonDateReviver(key, value) {
@@ -34,9 +33,7 @@ function IssueRow({ issue }) {
 }
 
 function IssueTable({ issues }) {
-  const issueRows = issues.map((issue) => (
-    <IssueRow key={issue.id} issue={issue} />
-  ));
+  const issueRows = issues.map((issue) => <IssueRow key={issue.id} issue={issue} />);
 
   return (
     <table className="bordered-table">
