@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "#start": "UI server. HMR is enabled in dev mode.",
     "start": "nodemon -w uiserver.js -w .env uiserver.js",
+    "#lint": "Runs ESLint on all relavent files",
+    "lint": "eslint . --ext js,jsx --ignore-pattern public",
+    "#compile": "Generate JS bundles for production. Use with start.",
     "compile": "webpack --mode production",
+    "#watch": "compile and recompile on any changes",
     "watch": "webpack --watch"
   },
   "author": "",
@@ -33,7 +38,9 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.1",
     "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-middleware": "^3.7.2",
+    "webpack-hot-middleware": "^2.25.0"
   },
   "prettier": {
     "printWidth": 100,
