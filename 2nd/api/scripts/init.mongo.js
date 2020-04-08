@@ -1,7 +1,6 @@
 /* global db print */
 /* eslint no-restricted-globals: "off" */
 
-
 db.issues.remove({});
 const issueDB = [
   {
@@ -12,7 +11,13 @@ const issueDB = [
     created: new Date('01/16/2019'),
     due: undefined,
     title: 'Error in console when clicking add',
-  }, {
+    description:
+      'steps to recreate the problem:'
+      + '\n1. Refresh the brower.'
+      + '\n2. select new in the filter.'
+      + '\n3. put in information and click add.',
+  },
+  {
     id: 2,
     status: 'Assigned',
     owner: 'Eddie',
@@ -20,6 +25,7 @@ const issueDB = [
     created: new Date('01/26/2019'),
     due: new Date('02/01/2019'),
     title: 'Missing bottom border',
+    description: 'There needs to be a border in the bottom of the panel',
   },
 ];
 

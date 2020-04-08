@@ -17,6 +17,7 @@ input IssueInputs {
   owner: String
   effort: Int
   due: GraphQLDate
+  description: String
 }
 
 enum StatusType {
@@ -35,6 +36,7 @@ type Issue {
   effort: Int
   created: GraphQLDate!
   due: GraphQLDate
+  description: String
 }
 
 ##### top level declarations
@@ -42,6 +44,7 @@ type Issue {
 type Query {
   about: String!
   issueList(status: StatusType): [Issue!]!
+  issue(id: Int!): Issue!
 }
 type Mutation {
   setAboutMessage(message: String!): String
