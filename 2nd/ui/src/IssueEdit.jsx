@@ -150,11 +150,14 @@ export default class IssueEdit extends React.Component {
             </tr>
             <tr>
               <td />
-              <td><button type="submit">Submit</button></td>
+              <td>
+                <button type="submit">Submit</button>
+              </td>
             </tr>
           </tbody>
         </table>
         <Link to={`/edit/${id - 1}`}>Prev</Link>
+        {' | '}
         <Link to={`/edit/${id + 1}`}>Next</Link>
       </form>
     );
