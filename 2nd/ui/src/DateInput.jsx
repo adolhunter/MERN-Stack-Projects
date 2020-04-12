@@ -1,12 +1,16 @@
 import React from 'react';
 
+// change the date to a format for display
 function displayFormat(date) {
   return date != null ? date.toDateString() : '';
 }
+
+// change the date to a format for edit in yyyy/mm/dd
 function editFormat(date) {
   return (date != null) ? date.toISOString().substr(0, 10) : '';
 }
 
+// change the date to a number presenting the date
 function unformat(str) {
   const val = new Date(str);
   return Number.isNaN(val.getTime()) ? null : val;
