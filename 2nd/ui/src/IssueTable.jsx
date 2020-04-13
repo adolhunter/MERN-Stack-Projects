@@ -1,10 +1,17 @@
 import React from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
+import { Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 const IssueRow = withRouter(({
   issue, location: { search }, closeIssue, deleteIssue, index,
 }) => {
   const selectLocation = { pathname: `/issues/${issue.id}`, search };
+  // const closeTooltip = (
+  //   <Tooltip id="tooltip-top">Close Issue</Tooltip>
+  //   );
+  //   cosnt deleteTooltip = (
+  //     <Tooltip id="tooltip-top">Close Issue</Tooltip>
+  // );
   return (
     <tr>
       <td>{issue.id}</td>
@@ -19,23 +26,37 @@ const IssueRow = withRouter(({
         {' | '}
         <NavLink to={selectLocation}>Select</NavLink>
         {' | '}
-        <button
-          type="button"
-          onClick={() => {
-            closeIssue(index);
-          }}
+        <OverlayTrigger
+          delayShow={1000}
+          key="top"
+          placement="top"
+          overlay={<Tooltip>Close Issue</Tooltip>}
         >
-          Close
-        </button>
-        {' | '}
-        <button
-          type="button"
-          onClick={() => {
-            deleteIssue(index);
-          }}
+          <Button
+            variant="primary"
+            onClick={() => {
+              closeIssue(index);
+            }}
+          >
+            <i className="fas fa-check" />
+          </Button>
+        </OverlayTrigger>
+        {' '}
+        <OverlayTrigger
+          delayShow={1000}
+          key="top"
+          placement="top"
+          overlay={<Tooltip>Delete Issue</Tooltip>}
         >
-          Delete
-        </button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              deleteIssue(index);
+            }}
+          >
+            <i className="fas fa-trash-alt" />
+          </Button>
+        </OverlayTrigger>
       </td>
     </tr>
   );
