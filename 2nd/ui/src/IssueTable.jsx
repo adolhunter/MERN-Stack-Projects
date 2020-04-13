@@ -33,7 +33,7 @@ const IssueRow = withRouter(({
           overlay={<Tooltip>Close Issue</Tooltip>}
         >
           <Button
-            variant="primary"
+            variant="light"
             onClick={() => {
               closeIssue(index);
             }}
@@ -49,7 +49,7 @@ const IssueRow = withRouter(({
           overlay={<Tooltip>Delete Issue</Tooltip>}
         >
           <Button
-            variant="primary"
+            variant="light"
             onClick={() => {
               deleteIssue(index);
             }}
