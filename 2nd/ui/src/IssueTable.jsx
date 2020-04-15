@@ -28,7 +28,7 @@ const IssueRow = withRouter(({
         {' | '}
         <OverlayTrigger
           delayShow={1000}
-          key="top"
+          key="close"
           placement="top"
           overlay={<Tooltip>Close Issue</Tooltip>}
         >
@@ -44,7 +44,7 @@ const IssueRow = withRouter(({
         {' '}
         <OverlayTrigger
           delayShow={1000}
-          key="top"
+          key="delete"
           placement="top"
           overlay={<Tooltip>Delete Issue</Tooltip>}
         >
