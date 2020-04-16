@@ -1,7 +1,7 @@
 import React from 'react';
 // import { Navbar, Nav } from 'react-router-dom';
 import {
-  Navbar, Nav, OverlayTrigger, Tooltip,
+  Navbar, Nav, OverlayTrigger, Tooltip, Container,
 } from 'react-bootstrap';
 import Contents from './Contents.jsx';
 
@@ -19,17 +19,14 @@ function NavBar() {
       </Navbar.Collapse>
       <Nav>
         <Nav.Link>
-          <OverlayTrigger
-            placement="bottom"
-            overlay={<Tooltip>Create Issue</Tooltip>}
-          >
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Create Issue</Tooltip>}>
             <i className="fas fa-plus" />
           </OverlayTrigger>
         </Nav.Link>
         {'  '}
         <Nav.Link>
           <OverlayTrigger placement="bottom" overlay={<Tooltip>about this app</Tooltip>}>
-            <i className="fas fa-info" />
+            <i className="fas fa-info-circle" />
           </OverlayTrigger>
         </Nav.Link>
       </Nav>
@@ -54,7 +51,9 @@ export default function page() {
   return (
     <div>
       <NavBar />
-      <Contents />
+      <Container fluid>
+        <Contents />
+      </Container>
       <Footer />
     </div>
   );

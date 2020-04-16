@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
+import { Card, Accordion } from 'react-bootstrap';
 import URLSearchParams from 'url-search-params';
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
@@ -128,8 +129,27 @@ export default class IssueList extends React.Component {
     const { match } = this.props;
     return (
       <>
-        <IssueFilter />
-        <hr />
+        <Accordion defaultActiveKey="0">
+          <Card>
+            <Accordion.Toggle as={Card.Header} eventKey="0" id="filter-toggle">
+              Filter
+            </Accordion.Toggle>
+            <Accordion.Collapse eventKey="0">
+              <Card.Body>
+                <IssueFilter />
+              </Card.Body>
+            </Accordion.Collapse>
+          </Card>
+        </Accordion>
+        {/*         <Card>
+          <Card.Header data-toggle="collapse" data-target="filter">
+            {' '}
+            Filter
+          </Card.Header>
+          <Card.Body>
+            <IssueFilter id="filter" />
+          </Card.Body>
+        </Card> */}
         <IssueTable issues={issues} closeIssue={this.closeIssue} deleteIssue={this.deleteIssue} />
         <hr />
         <IssueAdd createIssue={this.createIssue} />
