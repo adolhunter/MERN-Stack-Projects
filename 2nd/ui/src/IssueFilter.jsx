@@ -2,12 +2,7 @@ import React from 'react';
 import URLSearchParams from 'url-search-params';
 import { withRouter } from 'react-router-dom';
 import {
-  ButtonToolbar,
-  Button,
-  FormControl,
-  Row,
-  Col,
-  Form,
+  ButtonToolbar, Button, FormControl, Row, Col, Form, FormGroup,
 } from 'react-bootstrap';
 
 class IssueFilter extends React.Component {
@@ -85,47 +80,54 @@ class IssueFilter extends React.Component {
     const { status, changed } = this.state;
     const { effortMin, effortMax } = this.state;
     return (
-      <div>
-        <Form.Group>
-          <Form.Label>Status:</Form.Label>
-          <Form.Control as="select" value={status} onChange={this.onChangeStatus}>
-            <option value="">All</option>
-            <option value="New">New</option>
-            <option value="Assigned">Assigned</option>
-            <option value="Fixed">Fixed</option>
-            <option value="Closed">Closed</option>
-          </Form.Control>
-        </Form.Group>
-        <Form>
-          <Row>
-            <Col>
-              <FormControl
-                value={effortMin}
-                onChange={this.onChangeEffortMin}
-                placeholder="Min Effort"
-              />
-            </Col>
-            <Col>
-              <FormControl
-                value={effortMax}
-                onChange={this.onChangeEffortMax}
-                placeholder="Max Effort"
-              />
-            </Col>
-          </Row>
-        </Form>
-        {/* Effort between:
-        <input size={5} value={effortMin} onChange={this.onChangeEffortMin} />{' '}
-      <input size={5} value={effortMax} onChange={this.onChangeEffortMax} />{' '} */}
-        <ButtonToolbar>
-          <Button variant="primary" onClick={this.applyFilter}>
-            Apply
-          </Button>
-          <Button onClick={this.showOriginalFilter} disabled={!changed}>
-            Reset
-          </Button>
-        </ButtonToolbar>
-      </div>
+      <Form>
+        <Row>
+          <Col xs={6} sm={4} md={3} lg={2}>
+            <FormGroup>
+              <Form.Label>Status:</Form.Label>
+              <Form.Control as="select" value={status} onChange={this.onChangeStatus}>
+                <option value="">All</option>
+                <option value="New">New</option>
+                <option value="Assigned">Assigned</option>
+                <option value="Fixed">Fixed</option>
+                <option value="Closed">Closed</option>
+              </Form.Control>
+            </FormGroup>
+          </Col>
+          <Col xs={6} sm={4} md={3} lg={2}>
+            <Form.Label>Effort between:</Form.Label>
+            <Row>
+              <Col>
+                <FormControl
+                  value={effortMin}
+                  onChange={this.onChangeEffortMin}
+                  placeholder="Min Effort"
+                />
+              </Col>
+              <Col>
+                <FormControl
+                  value={effortMax}
+                  onChange={this.onChangeEffortMax}
+                  placeholder="Max Effort"
+                />
+              </Col>
+            </Row>
+          </Col>
+          <Col xs={6} sm={4} md={3} lg={2}>
+            <FormGroup>
+              <Form.Label>&nbsp;</Form.Label>
+              <ButtonToolbar>
+                <Button variant="primary" onClick={this.applyFilter}>
+                  Apply
+                </Button>
+                <Button onClick={this.showOriginalFilter} disabled={!changed}>
+                  Reset
+                </Button>
+              </ButtonToolbar>
+            </FormGroup>
+          </Col>
+        </Row>
+      </Form>
     );
   }
 }
