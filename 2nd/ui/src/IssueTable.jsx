@@ -1,18 +1,28 @@
 import React from 'react';
-import { Link, NavLink, withRouter } from 'react-router-dom';
-import { Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Link, withRouter } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap';
+import {
+  Button, Tooltip, OverlayTrigger, Table,
+} from 'react-bootstrap';
 
 const IssueRow = withRouter(({
   issue, location: { search }, closeIssue, deleteIssue, index,
 }) => {
   const selectLocation = { pathname: `/issues/${issue.id}`, search };
-  // const closeTooltip = (
-  //   <Tooltip id="tooltip-top">Close Issue</Tooltip>
-  //   );
-  //   cosnt deleteTooltip = (
-  //     <Tooltip id="tooltip-top">Close Issue</Tooltip>
-  // );
-  return (
+  const editTooltip = (
+    <Tooltip id="close-tooltip" placement="top">
+      Edit Issue
+    </Tooltip>
+  );
+  function onClose(e) {
+    e.preventDefault();
+    closeIssue(index);
+  }
+  function onDelete(e) {
+    e.preventDefault();
+    deleteIssue(index);
+  }
+  const tableRow = (
     <tr>
       <td>{issue.id}</td>
       <td>{issue.status}</td>
@@ -22,22 +32,21 @@ const IssueRow = withRouter(({
       <td>{issue.due ? issue.due.toDateString() : ''}</td>
       <td>{issue.title}</td>
       <td>
-        <Link to={`/edit/${issue.id}`}>edit</Link>
-        {' | '}
-        <NavLink to={selectLocation}>Select</NavLink>
-        {' | '}
+        <Link to={`/edit/${issue.id}`}>
+          <OverlayTrigger delayShow={1000} overlay={editTooltip}>
+            <Button variant="light">
+              <i className="fas fa-edit" />
+            </Button>
+          </OverlayTrigger>
+        </Link>
+        {' '}
         <OverlayTrigger
           delayShow={1000}
           key="close"
           placement="top"
           overlay={<Tooltip>Close Issue</Tooltip>}
         >
-          <Button
-            variant="light"
-            onClick={() => {
-              closeIssue(index);
-            }}
-          >
+          <Button variant="light" onClick={onClose}>
             <i className="fas fa-check" />
           </Button>
         </OverlayTrigger>
@@ -48,18 +57,14 @@ const IssueRow = withRouter(({
           placement="top"
           overlay={<Tooltip>Delete Issue</Tooltip>}
         >
-          <Button
-            variant="light"
-            onClick={() => {
-              deleteIssue(index);
-            }}
-          >
+          <Button variant="light" onClick={onDelete}>
             <i className="fas fa-trash-alt" />
           </Button>
         </OverlayTrigger>
       </td>
     </tr>
   );
+  return <LinkContainer to={selectLocation}>{tableRow}</LinkContainer>;
 });
 
 export default function IssueTable({ issues, closeIssue, deleteIssue }) {
@@ -74,7 +79,7 @@ export default function IssueTable({ issues, closeIssue, deleteIssue }) {
   ));
 
   return (
-    <table className="bordered-table">
+    <Table bordered hover responsive>
       <thead>
         <tr>
           <th>ID</th>
@@ -88,6 +93,6 @@ export default function IssueTable({ issues, closeIssue, deleteIssue }) {
         </tr>
       </thead>
       <tbody>{issueRows}</tbody>
-    </table>
+    </Table>
   );
 }
