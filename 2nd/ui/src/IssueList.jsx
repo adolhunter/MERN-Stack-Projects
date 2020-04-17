@@ -141,19 +141,8 @@ export default class IssueList extends React.Component {
             </Accordion.Collapse>
           </Card>
         </Accordion>
-        {/*         <Card>
-          <Card.Header data-toggle="collapse" data-target="filter">
-            {' '}
-            Filter
-          </Card.Header>
-          <Card.Body>
-            <IssueFilter id="filter" />
-          </Card.Body>
-        </Card> */}
         <IssueTable issues={issues} closeIssue={this.closeIssue} deleteIssue={this.deleteIssue} />
-        <hr />
         <IssueAdd createIssue={this.createIssue} />
-        <hr />
         <Route path={`${match.path}/:id`} component={IssueDetail} />
       </>
     );
