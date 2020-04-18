@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Card, Form, Col, Row, Button, ButtonToolbar,
+  Card, Form, Col, Row, Button, ButtonToolbar, FormControl,
 } from 'react-bootstrap';
 
 import graphQLFetch from './graphQLFetch.js';
@@ -78,6 +78,7 @@ export default class IssueEdit extends React.Component {
     const data = await graphQLFetch(query, { changes, id });
     if (data) {
       this.setState({ issue: data.issueUpdate });
+      // eslint-disable-next-line no-alert
       alert('update successful!');
     }
   }
@@ -171,7 +172,7 @@ export default class IssueEdit extends React.Component {
                   name="owner"
                   onChange={this.onChange}
                   key={id}
-                  componentClass={TextInput}
+                  as={TextInput}
                 />
               </Col>
             </Form.Group>
@@ -186,7 +187,7 @@ export default class IssueEdit extends React.Component {
                   name="effort"
                   onChange={this.onChange}
                   key={id}
-                  componentClass={NumInput}
+                  as={NumInput}
                 />
               </Col>
             </Form.Group>
@@ -202,8 +203,10 @@ export default class IssueEdit extends React.Component {
                   onChange={this.onChange}
                   onValidityChange={this.onValidityChange}
                   key={id}
-                  componentClass={DateInput}
+                  as={DateInput}
+                  placeholder="e.g, 2019/01/01"
                 />
+                <FormControl.Feedback />
               </Col>
             </Form.Group>
 
@@ -218,7 +221,7 @@ export default class IssueEdit extends React.Component {
                   name="title"
                   onChange={this.onChange}
                   key={id}
-                  componentClass={TextInput}
+                  as={TextInput}
                 />
               </Col>
             </Form.Group>
@@ -229,13 +232,12 @@ export default class IssueEdit extends React.Component {
               </Form.Label>
               <Col sm={9}>
                 <Form.Control
-                  as="textarea"
                   rows="5"
                   value={description}
                   name="description"
                   onChange={this.onChange}
                   key={id}
-                  componentClass={TextInput}
+                  as={TextInput}
                 />
               </Col>
             </Form.Group>
