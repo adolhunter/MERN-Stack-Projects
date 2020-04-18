@@ -192,7 +192,7 @@ export default class IssueEdit extends React.Component {
               </Col>
             </Form.Group>
 
-            <Form.Group validationState={invalidFields.due ? 'error' : null} as={Row}>
+            <Form.Group validationstate={invalidFields.due ? 'error' : null} as={Row}>
               <Form.Label column sm={3}>
                 Due
               </Form.Label>
