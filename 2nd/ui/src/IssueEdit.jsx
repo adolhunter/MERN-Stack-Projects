@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Card, Form, Col, Row, Button, ButtonToolbar, FormControl,
+  Card, Form, Col, Row, Button, ButtonToolbar, FormControl, Alert,
 } from 'react-bootstrap';
 
 import graphQLFetch from './graphQLFetch.js';
@@ -15,6 +15,7 @@ export default class IssueEdit extends React.Component {
     this.state = {
       issue: {},
       invalidFields: {},
+      showingValidation: false,
     };
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -58,8 +59,17 @@ export default class IssueEdit extends React.Component {
     });
   }
 
+  showValidation() {
+    this.setState({ showingValidation: true });
+  }
+
+  dismissValidation() {
+    this.setState({ showingValidation: false });
+  }
+
   async handleSubmit(e) {
     e.preventDefault();
+    this.showValidation();
     const { issue, invalidFields } = this.state;
     if (Object.keys(invalidFields).length !== 0) return;
     const query = `mutation issueUpdate(
@@ -116,11 +126,13 @@ export default class IssueEdit extends React.Component {
       return null;
     }
 
-    const { invalidFields } = this.state;
+    const { invalidFields, showingValidation } = this.state;
     let validationMessage;
-    if (Object.keys(invalidFields).length !== 0) {
+    if (Object.keys(invalidFields).length !== 0 && showingValidation) {
       validationMessage = (
-        <div className="error">Please correct invalid fields before submitting.</div>
+        <Alert variant="danger" onClose={this.dismissValidation}>
+          Please correct invalid fields before submitting!
+        </Alert>
       );
     }
 
@@ -254,8 +266,12 @@ export default class IssueEdit extends React.Component {
                 </ButtonToolbar>
               </Col>
             </Form.Group>
+            <Form.Group>
+              <Col sm={9} offset={3} dismissible={1} onClose={this.dismissValidation}>
+                {validationMessage}
+              </Col>
+            </Form.Group>
           </Form>
-          {validationMessage}
         </Card.Body>
         <Card.Footer className="text-muted">
           <Link to={`/edit/${id - 1}`}>Prev</Link>
