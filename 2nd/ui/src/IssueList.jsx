@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { Card, Accordion } from 'react-bootstrap';
+import { Card, Accordion, Toast } from 'react-bootstrap';
 import URLSearchParams from 'url-search-params';
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
@@ -11,10 +11,12 @@ import graphQLFetch from './graphQLFetch.js';
 export default class IssueList extends React.Component {
   constructor() {
     super();
-    this.state = { issues: [] };
+    this.state = { issues: [], toastVisible: false, toastMessage: '' };
     this.createIssue = this.createIssue.bind(this);
     this.closeIssue = this.closeIssue.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
+    this.showMessage = this.showMessage.bind(this);
+    this.dismissToast = this.dismissToast.bind(this);
   }
 
   componentDidMount() {
@@ -59,7 +61,7 @@ export default class IssueList extends React.Component {
         }
     }`;
 
-    const data = await graphQLFetch(query, vars);
+    const data = await graphQLFetch(query, vars, this.showMessage);
     if (data) {
       this.setState({ issues: data.issueList });
     }
@@ -72,7 +74,7 @@ export default class IssueList extends React.Component {
       }
     }`;
 
-    const data = await graphQLFetch(query, { issue });
+    const data = await graphQLFetch(query, { issue }, this.showMessage);
     if (data) {
       this.loadData();
     }
@@ -87,7 +89,7 @@ export default class IssueList extends React.Component {
     }
     `;
     const { issues } = this.state;
-    const data = await graphQLFetch(query, { id: issues[index].id });
+    const data = await graphQLFetch(query, { id: issues[index].id }, this.showMessage);
     if (data) {
       this.setState((prevState) => {
         const newList = [...prevState.issues];
@@ -109,7 +111,7 @@ export default class IssueList extends React.Component {
       history,
     } = this.props;
     const { id } = issues[index];
-    const data = await graphQLFetch(query, { id });
+    const data = await graphQLFetch(query, { id }, this.showMessage);
     if (data && data.issueDelete) {
       this.setState((prevState) => {
         const newList = [...prevState.issues];
@@ -119,13 +121,22 @@ export default class IssueList extends React.Component {
         newList.splice(index, 1);
         return { issues: newList };
       });
+      this.showMessage(`Deleted issue ${id} successfully!`);
     } else {
       this.loadData();
     }
   }
 
+  showMessage(message) {
+    this.setState({ toastVisible: true, toastMessage: message });
+  }
+
+  dismissToast() {
+    this.setState({ toastVisible: false });
+  }
+
   render() {
-    const { issues } = this.state;
+    const { issues, toastVisible, toastMessage } = this.state;
     const { match } = this.props;
     return (
       <>
@@ -144,6 +155,13 @@ export default class IssueList extends React.Component {
         <IssueTable issues={issues} closeIssue={this.closeIssue} deleteIssue={this.deleteIssue} />
         <IssueAdd createIssue={this.createIssue} />
         <Route path={`${match.path}/:id`} component={IssueDetail} />
+        <Toast onClose={this.dismissToast} show={toastVisible} delay={3000} autohide>
+          <Toast.Header>
+            <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
+            <strong className="mr-auto">Update Status</strong>
+          </Toast.Header>
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
       </>
     );
   }

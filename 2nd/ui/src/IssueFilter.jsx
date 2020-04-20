@@ -1,9 +1,7 @@
 import React from 'react';
 import URLSearchParams from 'url-search-params';
 import { withRouter } from 'react-router-dom';
-import {
-  ButtonToolbar, Button, FormControl, Row, Col, Form, FormGroup,
-} from 'react-bootstrap';
+import { ButtonToolbar, Button, FormControl, Row, Col, Form, FormGroup } from 'react-bootstrap';
 
 class IssueFilter extends React.Component {
   constructor({ location: { search } }) {
@@ -120,6 +118,7 @@ class IssueFilter extends React.Component {
                 <Button variant="primary" onClick={this.applyFilter}>
                   Apply
                 </Button>
+                &nbsp;
                 <Button onClick={this.showOriginalFilter} disabled={!changed}>
                   Reset
                 </Button>
