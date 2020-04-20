@@ -19,7 +19,7 @@ export default async function graphQLFetch(query, variables = {}, showError = nu
       const error = result.errors[0];
       if (error.extensions.code === 'BAD_USER_INPUT') {
         const details = error.extensions.exception.errors.join('\n ');
-        if (showError) showError(`$(error.message): \n ${details}`);
+        if (showError) showError(`${error.message}: \n ${details}`);
       } else if (showError) {
         showError(`${error.extensions.code}:${error.message}`);
       }
