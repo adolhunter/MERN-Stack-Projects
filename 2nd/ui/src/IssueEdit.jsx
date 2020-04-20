@@ -1,6 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Form, Col, Row, Button, ButtonToolbar, FormControl, Alert } from 'react-bootstrap';
+import {
+  Card,
+  Form,
+  Col,
+  Row,
+  Button,
+  ButtonToolbar,
+  FormControl,
+  Alert,
+  Toast,
+} from 'react-bootstrap';
 
 import graphQLFetch from './graphQLFetch.js';
 import NumInput from './NumInput.jsx';
@@ -14,11 +24,15 @@ export default class IssueEdit extends React.Component {
       issue: {},
       invalidFields: {},
       showingValidation: false,
+      toastVisible: false,
+      toastMessage: '',
     };
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onValidityChange = this.onValidityChange.bind(this);
     this.dismissValidation = this.dismissValidation.bind(this);
+    this.showToast = this.showToast.bind(this);
+    this.dismissToast = this.dismissToast.bind(this);
   }
 
   componentDidMount() {
@@ -84,11 +98,11 @@ export default class IssueEdit extends React.Component {
       }}`;
 
     const { id, created, ...changes } = issue;
-    const data = await graphQLFetch(query, { changes, id });
+    const data = await graphQLFetch(query, { changes, id }, this.showToast);
     if (data) {
       this.setState({ issue: data.issueUpdate });
       // eslint-disable-next-line no-alert
-      alert('update successful!');
+      this.showToast('Updated issue successfully!');
     }
   }
 
@@ -105,8 +119,21 @@ export default class IssueEdit extends React.Component {
         params: { id },
       },
     } = this.props;
-    const data = await graphQLFetch(query, { id });
+    const data = await graphQLFetch(query, { id }, this.showToast);
     this.setState({ issue: data ? data.issue : {}, invalidFields: {} });
+  }
+
+  showToast(message) {
+    this.setState({
+      toastVisible: true,
+      toastMessage: message,
+    });
+  }
+
+  dismissToast() {
+    this.setState({
+      toastVisible: false,
+    });
   }
 
   render() {
@@ -144,6 +171,7 @@ export default class IssueEdit extends React.Component {
     const {
       issue: { created, due },
     } = this.state;
+    const { toastVisible, toastMessage } = this.state;
 
     return (
       <Card>
@@ -272,6 +300,15 @@ export default class IssueEdit extends React.Component {
             </Form.Group>
           </Form>
         </Card.Body>
+
+        <Toast show={toastVisible} delay={3000} autohide onClose={this.dismissToast}>
+          <Toast.Header>
+            <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
+            <strong className="mr-auto">Update Status</strong>
+          </Toast.Header>
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
+
         <Card.Footer className="text-muted">
           <Link to={`/edit/${id - 1}`}>Prev</Link>
           {' | '}
