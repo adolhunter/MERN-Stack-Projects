@@ -20,6 +20,7 @@ export default class IssueEdit extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onValidityChange = this.onValidityChange.bind(this);
+    this.dismissValidation = this.dismissValidation.bind(this);
   }
 
   componentDidMount() {
@@ -130,7 +131,7 @@ export default class IssueEdit extends React.Component {
     let validationMessage;
     if (Object.keys(invalidFields).length !== 0 && showingValidation) {
       validationMessage = (
-        <Alert variant="danger" onClose={this.dismissValidation}>
+        <Alert variant="danger" onClose={this.dismissValidation} dismissible>
           Please correct invalid fields before submitting!
         </Alert>
       );
@@ -267,7 +268,7 @@ export default class IssueEdit extends React.Component {
               </Col>
             </Form.Group>
             <Form.Group>
-              <Col sm={9} offset={3} dismissible={1} onClose={this.dismissValidation}>
+              <Col sm={9} offset={3}>
                 {validationMessage}
               </Col>
             </Form.Group>
