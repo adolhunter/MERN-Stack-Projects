@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Card, Form, Col, Row, Button, ButtonToolbar, FormControl, Alert,
-} from 'react-bootstrap';
+import { Card, Form, Col, Row, Button, ButtonToolbar, FormControl, Alert } from 'react-bootstrap';
 
 import graphQLFetch from './graphQLFetch.js';
 import NumInput from './NumInput.jsx';
