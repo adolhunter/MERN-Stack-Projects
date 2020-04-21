@@ -4,7 +4,6 @@ import { Card, Accordion, Toast } from 'react-bootstrap';
 import URLSearchParams from 'url-search-params';
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
-import IssueAdd from './IssueAdd.jsx';
 import IssueDetail from './IssueDetail.jsx';
 import graphQLFetch from './graphQLFetch.js';
 
@@ -12,7 +11,6 @@ export default class IssueList extends React.Component {
   constructor() {
     super();
     this.state = { issues: [], toastVisible: false, toastMessage: '' };
-    this.createIssue = this.createIssue.bind(this);
     this.closeIssue = this.closeIssue.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
     this.showMessage = this.showMessage.bind(this);
@@ -64,19 +62,6 @@ export default class IssueList extends React.Component {
     const data = await graphQLFetch(query, vars, this.showMessage);
     if (data) {
       this.setState({ issues: data.issueList });
-    }
-  }
-
-  async createIssue(issue) {
-    const query = `mutation issueAdd($issue: IssueInputs!) {
-      issueAdd(issue: $issue) {
-        id
-      }
-    }`;
-
-    const data = await graphQLFetch(query, { issue }, this.showMessage);
-    if (data) {
-      this.loadData();
     }
   }
 
@@ -153,7 +138,6 @@ export default class IssueList extends React.Component {
           </Card>
         </Accordion>
         <IssueTable issues={issues} closeIssue={this.closeIssue} deleteIssue={this.deleteIssue} />
-        <IssueAdd createIssue={this.createIssue} />
         <Route path={`${match.path}/:id`} component={IssueDetail} />
         <Toast onClose={this.dismissToast} show={toastVisible} delay={3000} autohide>
           <Toast.Header>

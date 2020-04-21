@@ -1,8 +1,8 @@
 import React from 'react';
-// import { Navbar, Nav } from 'react-router-dom';
 import {
   Navbar, Nav, OverlayTrigger, Tooltip, Container,
 } from 'react-bootstrap';
+import IssueAddNavItem from './IssueAddNavItem.jsx';
 import Contents from './Contents.jsx';
 
 function NavBar() {
@@ -18,17 +18,12 @@ function NavBar() {
         </Nav>
       </Navbar.Collapse>
       <Nav>
-        <Nav.Link>
-          <OverlayTrigger placement="bottom" overlay={<Tooltip>Create Issue</Tooltip>}>
-            <i className="fas fa-plus" />
-          </OverlayTrigger>
-        </Nav.Link>
-        {'  '}
-        <Nav.Link>
+        <IssueAddNavItem />
+        <Nav.Item>
           <OverlayTrigger placement="bottom" overlay={<Tooltip>about this app</Tooltip>}>
             <i className="fas fa-info-circle" />
           </OverlayTrigger>
-        </Nav.Link>
+        </Nav.Item>
       </Nav>
     </Navbar>
   );
