@@ -26,7 +26,7 @@ class IssueAddNavItem extends React.Component {
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
-    this.handleSumbit = this.handleSumbit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.showMessage = this.showMessage.bind(this);
     this.dismissToast = this.dismissToast.bind(this);
   }
@@ -50,11 +50,10 @@ class IssueAddNavItem extends React.Component {
     this.setState({ toastVisible: false });
   }
 
-  async handleSumbit(e) {
+  async handleSubmit(e) {
     e.preventDefault();
     this.hideModal();
-    // eslint-disable-next-line no-undef
-    const form = await ducument.forms.issueAdd;
+    const form = document.forms.IssueAdd;
     const issue = {
       owner: form.owner.value,
       title: form.title.value,
@@ -65,10 +64,11 @@ class IssueAddNavItem extends React.Component {
         id
       }
     }`;
-    const data = await graphQLFetch(query, { issue }, this.showMessage);
+
+    const data = await graphQLFetch(query, { issue }, this.showError);
     if (data) {
       const { history } = this.props;
-      history.push(`edit/${data.issueAdd.id}`);
+      history.push(`/edit/${data.issueAdd.id}`);
     }
   }
 
@@ -107,7 +107,7 @@ class IssueAddNavItem extends React.Component {
 
           <Modal.Footer>
             <ButtonToolbar>
-              <Button type="button" variant="primary" onClick={this.handleSumbit}>
+              <Button type="button" variant="primary" onClick={this.handleSubmit}>
                 Submit
               </Button>
               <Button variant="link" onClick={this.hideModal}>
