@@ -1,0 +1,12 @@
+{
+    "env": {
+        "browser": true
+    },
+    "rules": {
+        "react/prop-types": "off",
+        "import/extensions": ["error", "always", {
+            "ignorePackages": true
+        }],
+        "object-curly-newline": "off"
+    }
+}
