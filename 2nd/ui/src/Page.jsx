@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Navbar, Nav, OverlayTrigger, Tooltip, Container,
-} from 'react-bootstrap';
+import { Navbar, Nav, OverlayTrigger, Tooltip, Container } from 'react-bootstrap';
 import IssueAddNavItem from './IssueAddNavItem.jsx';
 import Contents from './Contents.jsx';
 
@@ -21,7 +19,9 @@ function NavBar() {
         <IssueAddNavItem />
         <Nav.Item>
           <OverlayTrigger placement="bottom" overlay={<Tooltip>about this app</Tooltip>}>
-            <i className="fas fa-info-circle" />
+            <Nav.Link href="/about">
+              <i className="fas fa-info-circle" />
+            </Nav.Link>
           </OverlayTrigger>
         </Nav.Item>
       </Nav>

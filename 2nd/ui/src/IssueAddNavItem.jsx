@@ -79,11 +79,13 @@ class IssueAddNavItem extends React.Component {
       <>
         <Nav.Item onClick={this.showModal}>
           <OverlayTrigger
-            placement="left"
+            placement="bottom"
             overlay={<Tooltip>Create Issue</Tooltip>}
             delay={{ show: 250, hide: 400 }}
           >
-            <i className="fas fa-plus" />
+            <Nav.Link>
+              <i className="fas fa-plus" />
+            </Nav.Link>
           </OverlayTrigger>
         </Nav.Item>
 
