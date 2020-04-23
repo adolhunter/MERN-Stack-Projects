@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "18cf5b3e5c5d4bbd3afe";
+/******/ 	var hotCurrentHash = "f06d39aa92bf03b57163";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -819,6 +819,11 @@ function template(body) {
 <body>
     <!-- Page generated from template. -->
     <div id="contents">${body}</div>
+
+    <script src="/env.js"></script>
+    <script src="/vendor.bundle.js"></script>
+    <script src="/app.bundle.js"></script>
+
 </body>
 
 </html>`;
@@ -2891,4 +2896,5 @@ module.exports = require("webpack-node-externals");
 /***/ })
 
 /******/ });
+//# sourceMappingURL=server.js.map
 //# sourceMappingURL=server.js.map
