@@ -3,3 +3,7 @@ node_modules/
 
 # Ignore environment variable
 .env
+
+#Ignore dist files as hash changes often
+*.hot-update.*
+
