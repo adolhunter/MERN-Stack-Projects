@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch';
+
 const dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
 
 function jsonDateReviver(key, value) {
@@ -6,8 +8,12 @@ function jsonDateReviver(key, value) {
 }
 
 export default async function graphQLFetch(query, variables = {}, showError = null) {
+  // eslint-disable-next-line no-undef
+  const apiEndpoint = __isBrowser__
+    ? window.ENV.UI_API_ENDPOINT
+    : process.env.UI_SERVER_API_ENDOPOINT;
   try {
-    const response = await fetch(window.ENV.UI_API_ENDPOINT, {
+    const response = await fetch(apiEndpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query, variables }),

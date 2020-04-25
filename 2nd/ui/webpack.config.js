@@ -1,5 +1,6 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
+const webpack = require('webpack');
 
 const browserConfig = {
   mode: 'development',
@@ -9,6 +10,11 @@ const browserConfig = {
     path: path.resolve(__dirname, 'public'),
     publicPath: '/',
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      __isBrowser__: 'true',
+    }),
+  ],
   module: {
     rules: [
       {
@@ -56,6 +62,11 @@ const serverConfig = {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      __isBrowser__: 'false',
+    }),
+  ],
   module: {
     rules: [
       {
