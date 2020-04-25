@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "34ee8a3d601f8d4767b8";
+/******/ 	var hotCurrentHash = "9ac099c16ae05f65eea6";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -782,14 +782,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 async function render(req, res) {
-  const initialData = await Object(_src_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_5__["default"])(`query{about}`);
+  const initialData = await Object(_src_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_5__["default"])('query{about}');
   _src_store_js__WEBPACK_IMPORTED_MODULE_6__["default"].initialData = initialData;
+  console.log(JSON.stringify(initialData));
   const element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["StaticRouter"], {
     location: req.url,
     context: {}
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_src_Page_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], null));
   const body = react_dom_server__WEBPACK_IMPORTED_MODULE_1___default.a.renderToString(element);
-  res.send(Object(_template_js__WEBPACK_IMPORTED_MODULE_4__["default"])(body));
+  res.send(Object(_template_js__WEBPACK_IMPORTED_MODULE_4__["default"])(body, initialData));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (render);
@@ -806,7 +807,7 @@ async function render(req, res) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return template; });
-function template(body) {
+function template(body, data) {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -823,13 +824,12 @@ function template(body) {
 </head>
 
 <body>
-    <!-- Page generated from template. -->
-    <div id="contents">${body}</div>
-
-    <script src="/env.js"></script>
-    <script src="/vendor.bundle.js"></script>
-    <script src="/app.bundle.js"></script>
-
+  <!-- Page generated from template. -->
+  <div id="contents">${body}</div>
+  <script>window.__INITIAL_DATA__ = ${JSON.stringify(data)}</script>
+  <script src="/env.js"></script>
+  <script src="/vendor.bundle.js"></script>
+  <script src="/app.bundle.js"></script>
 </body>
 
 </html>`;
@@ -905,7 +905,7 @@ if (!process.env.UI_API_ENDPOINT) {
 }
 
 if (!process.env.UI_SERVER_API_ENDPOINT) {
-  process.env.UI_API_ENDPOINT = process.env.UI_API_ENDPOINT;
+  process.env.UI_SERVER_API_ENDPOINT = process.env.UI_API_ENDPOINT;
 }
 
 app.get('/env.js', (req, res) => {
@@ -2608,8 +2608,8 @@ function jsonDateReviver(key, value) {
 }
 
 async function graphQLFetch(query, variables = {}, showError = null) {
-  // eslint-disable-next-line no-undef
-  const apiEndpoint =  false ? undefined : process.env.UI_SERVER_API_ENDOPOINT;
+  const apiEndpoint =  false // eslint-disable-line no-undef
+  ? undefined : process.env.UI_SERVER_API_ENDPOINT;
 
   try {
     const response = await isomorphic_fetch__WEBPACK_IMPORTED_MODULE_0___default()(apiEndpoint, {
@@ -2950,5 +2950,4 @@ module.exports = require("webpack-node-externals");
 /***/ })
 
 /******/ });
-//# sourceMappingURL=server.js.map
 //# sourceMappingURL=server.js.map

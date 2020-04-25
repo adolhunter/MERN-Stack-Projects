@@ -1,5 +1,5 @@
-export default function template(body) {
-    return `
+export default function template(body, data) {
+  return `
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,15 +15,13 @@ export default function template(body) {
 </head>
 
 <body>
-    <!-- Page generated from template. -->
-    <div id="contents">${body}</div>
-
-    <script src="/env.js"></script>
-    <script src="/vendor.bundle.js"></script>
-    <script src="/app.bundle.js"></script>
-
+  <!-- Page generated from template. -->
+  <div id="contents">${body}</div>
+  <script>window.__INITIAL_DATA__ = ${JSON.stringify(data)}</script>
+  <script src="/env.js"></script>
+  <script src="/vendor.bundle.js"></script>
+  <script src="/app.bundle.js"></script>
 </body>
 
 </html>`;
 }
-
