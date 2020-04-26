@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "af8aa58aafe0637092dc";
+/******/ 	var hotCurrentHash = "8017f4f2c8ce12b49058";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -896,7 +896,7 @@ app.use(express__WEBPACK_IMPORTED_MODULE_1___default.a.static('public'));
 const apiProxyTarget = process.env.API_PROXY_TARGET;
 
 if (apiProxyTarget) {
-  app.use('/graphql', createProxyMiddleware({
+  app.use('/graphql', Object(http_proxy_middleware__WEBPACK_IMPORTED_MODULE_2__["createProxyMiddleware"])({
     target: apiProxyTarget,
     changeOrigin: true
   }));
@@ -3024,5 +3024,4 @@ module.exports = require("webpack-node-externals");
 /***/ })
 
 /******/ });
-//# sourceMappingURL=server.js.map
 //# sourceMappingURL=server.js.map

@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import proxy from 'http-proxy-middleware';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import SourceMapSupport from 'source-map-support';
 
 import render from './render.jsx';
