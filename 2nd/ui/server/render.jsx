@@ -4,13 +4,12 @@ import { StaticRouter } from 'react-router-dom';
 
 import Page from '../src/Page.jsx';
 import template from './template.js';
-import graphQLFetch from '../src/graphQLFetch.js';
+import About from '../src/About.jsx'
 import store from '../src/store.js';
 
 async function render(req, res) {
-  const initialData = await graphQLFetch('query{about}');
+  const initialData = About.fetchData;
   store.initialData = initialData;
-  console.log(JSON.stringify(initialData));
   const element = (
     <StaticRouter location={req.url} context={{}}>
       <Page />
