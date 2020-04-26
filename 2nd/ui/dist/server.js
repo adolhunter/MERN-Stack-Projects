@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "def72bebd96bec04f457";
+/******/ 	var hotCurrentHash = "4eac3a0f689b8b0e753a";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -787,7 +787,7 @@ async function render(req, res) {
 
   if (activeRoute && activeRoute.component.fetchData) {
     const match = Object(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["matchPath"])(req.path, activeRoute);
-    initialData = await activeRoute.component.fetchData();
+    initialData = await activeRoute.component.fetchData(match);
   }
 
   _src_store_js__WEBPACK_IMPORTED_MODULE_5__["default"].initialData = initialData;
@@ -813,6 +813,9 @@ async function render(req, res) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return template; });
+/* harmony import */ var serialize_javascript__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! serialize-javascript */ "serialize-javascript");
+/* harmony import */ var serialize_javascript__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(serialize_javascript__WEBPACK_IMPORTED_MODULE_0__);
+
 function template(body, data) {
   return `
 <!DOCTYPE html>
@@ -832,7 +835,7 @@ function template(body, data) {
 <body>
   <!-- Page generated from template. -->
   <div id="contents">${body}</div>
-  <script>window.__INITIAL_DATA__ = ${JSON.stringify(data)}</script>
+  <script>window.__INITIAL_DATA__ = ${serialize_javascript__WEBPACK_IMPORTED_MODULE_0___default()(data)}</script>
   <script src="/env.js"></script>
   <script src="/vendor.bundle.js"></script>
   <script src="/app.bundle.js"></script>
@@ -2976,6 +2979,17 @@ module.exports = require("react-router-dom");
 
 /***/ }),
 
+/***/ "serialize-javascript":
+/*!***************************************!*\
+  !*** external "serialize-javascript" ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("serialize-javascript");
+
+/***/ }),
+
 /***/ "source-map-support":
 /*!*************************************!*\
   !*** external "source-map-support" ***!
@@ -3043,5 +3057,4 @@ module.exports = require("webpack-node-externals");
 /***/ })
 
 /******/ });
-//# sourceMappingURL=server.js.map
 //# sourceMappingURL=server.js.map
