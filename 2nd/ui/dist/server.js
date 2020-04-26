@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "8017f4f2c8ce12b49058";
+/******/ 	var hotCurrentHash = "def72bebd96bec04f457";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -786,6 +786,7 @@ async function render(req, res) {
   let initialData;
 
   if (activeRoute && activeRoute.component.fetchData) {
+    const match = Object(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["matchPath"])(req.path, activeRoute);
     initialData = await activeRoute.component.fetchData();
   }
 
@@ -957,6 +958,7 @@ class About extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   constructor(props) {
     super(props);
     const apiAbout = _store_js__WEBPACK_IMPORTED_MODULE_1__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_1__["default"].initialData.about : null;
+    delete _store_js__WEBPACK_IMPORTED_MODULE_1__["default"].initialData;
     this.state = {
       apiAbout
     };
@@ -1416,10 +1418,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_router_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap */ "react-bootstrap");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _graphQLFetch_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./graphQLFetch.js */ "./src/graphQLFetch.js");
-/* harmony import */ var _NumInput_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./NumInput.jsx */ "./src/NumInput.jsx");
-/* harmony import */ var _DateInput_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DateInput.jsx */ "./src/DateInput.jsx");
-/* harmony import */ var _TextInput_jsx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TextInput.jsx */ "./src/TextInput.jsx");
+/* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store.js */ "./src/store.js");
+/* harmony import */ var _graphQLFetch_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./graphQLFetch.js */ "./src/graphQLFetch.js");
+/* harmony import */ var _NumInput_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./NumInput.jsx */ "./src/NumInput.jsx");
+/* harmony import */ var _DateInput_jsx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./DateInput.jsx */ "./src/DateInput.jsx");
+/* harmony import */ var _TextInput_jsx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TextInput.jsx */ "./src/TextInput.jsx");
+
 
 
 
@@ -1428,10 +1432,30 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+  static async fetchData(match, showError) {
+    const query = `query issue ($id: Int!) {
+      issue(id: $id) {
+        id title status owner
+        effort created due description
+      }
+    }`;
+    const {
+      params: {
+        id
+      }
+    } = match;
+    const result = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_4__["default"])(query, {
+      id
+    }, showError);
+    return result;
+  }
+
   constructor() {
     super();
+    const issue = _store_js__WEBPACK_IMPORTED_MODULE_3__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_3__["default"].initialData.issue : null;
+    delete _store_js__WEBPACK_IMPORTED_MODULE_3__["default"].initialData;
     this.state = {
-      issue: {},
+      issue,
       invalidFields: {},
       showingValidation: false,
       toastVisible: false,
@@ -1446,7 +1470,10 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   }
 
   componentDidMount() {
-    this.loadData();
+    const {
+      issue
+    } = this.state;
+    if (issue == null) this.loadData();
   }
 
   componentDidUpdate(prevProps) {
@@ -1534,7 +1561,7 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       created,
       ...changes
     } = issue;
-    const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_3__["default"])(query, {
+    const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_4__["default"])(query, {
       changes,
       id
     }, this.showToast);
@@ -1549,22 +1576,10 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   }
 
   async loadData() {
-    const query = `query issue($id: Int!) {
-      issue(id: $id) {
-        id title status owner
-        effort created due description
-      }
-    }`;
     const {
-      match: {
-        params: {
-          id
-        }
-      }
+      match
     } = this.props;
-    const data = await Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_3__["default"])(query, {
-      id
-    }, this.showToast);
+    const data = await IssueEdit.fetchData(match, this.showError);
     this.setState({
       issue: data ? data.issue : {},
       invalidFields: {}
@@ -1585,6 +1600,10 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   }
 
   render() {
+    const {
+      issue
+    } = this.state;
+    if (issue == null) return null;
     const {
       issue: {
         id
@@ -1688,7 +1707,7 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       name: "owner",
       onChange: this.onChange,
       key: id,
-      as: _TextInput_jsx__WEBPACK_IMPORTED_MODULE_6__["default"]
+      as: _TextInput_jsx__WEBPACK_IMPORTED_MODULE_7__["default"]
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Group, {
       as: react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Row"]
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Label, {
@@ -1701,7 +1720,7 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       name: "effort",
       onChange: this.onChange,
       key: id,
-      as: _NumInput_jsx__WEBPACK_IMPORTED_MODULE_4__["default"]
+      as: _NumInput_jsx__WEBPACK_IMPORTED_MODULE_5__["default"]
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Group, {
       validationstate: invalidFields.due ? 'error' : null,
       as: react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Row"]
@@ -1716,7 +1735,7 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       onChange: this.onChange,
       onValidityChange: this.onValidityChange,
       key: id,
-      as: _DateInput_jsx__WEBPACK_IMPORTED_MODULE_5__["default"],
+      as: _DateInput_jsx__WEBPACK_IMPORTED_MODULE_6__["default"],
       placeholder: "e.g, 2019/01/01"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["FormControl"].Feedback, null))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Group, {
       as: react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Row"]
@@ -1731,7 +1750,7 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       name: "title",
       onChange: this.onChange,
       key: id,
-      as: _TextInput_jsx__WEBPACK_IMPORTED_MODULE_6__["default"]
+      as: _TextInput_jsx__WEBPACK_IMPORTED_MODULE_7__["default"]
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Group, {
       as: react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Row"]
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Label, {
@@ -1745,7 +1764,7 @@ class IssueEdit extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       name: "description",
       onChange: this.onChange,
       key: id,
-      as: _TextInput_jsx__WEBPACK_IMPORTED_MODULE_6__["default"]
+      as: _TextInput_jsx__WEBPACK_IMPORTED_MODULE_7__["default"]
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Group, {
       as: react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Row"]
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Col"], {
@@ -3024,4 +3043,5 @@ module.exports = require("webpack-node-externals");
 /***/ })
 
 /******/ });
+//# sourceMappingURL=server.js.map
 //# sourceMappingURL=server.js.map
