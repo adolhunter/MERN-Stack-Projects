@@ -1,5 +1,4 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
 import { Card, Accordion, Toast } from 'react-bootstrap';
 import URLSearchParams from 'url-search-params';
 import IssueFilter from './IssueFilter.jsx';
@@ -11,16 +10,26 @@ import store from './store.js';
 export default class IssueList extends React.Component {
   static async fetchData(match, search, showError) {
     const params = new URLSearchParams(search);
-    const vars = {};
+    const vars = { hasSelection: false, selectedId: 0 };
     if (params.get('status')) vars.status = params.get('status');
     const effortMin = parseInt(params.get('effortMin'), 10);
     if (!Number.isNaN(effortMin)) vars.effortMin = effortMin;
     const effortMax = parseInt(params.get('effortMax'), 10);
     if (!Number.isNaN(effortMax)) vars.effortMax = effortMax;
+    const {
+      params: { id },
+    } = match;
+    const idInt = parseInt(id, 10);
+    if (!Number.isNaN(idInt)) {
+      vars.hasSelection = true;
+      vars.selectedId = idInt;
+    }
     const query = `query issueList(
       $status: StatusType
       $effortMin: Int
       $effortMax: Int
+      $hasSelection: Boolean!
+      $selectedId: Int!
     ) {
       issueList(
         status: $status
@@ -30,7 +39,10 @@ export default class IssueList extends React.Component {
         id title status owner
         created effort due
       }
-    }`;
+      issue(id: $selectedId) @include (if : $hasSelection) {
+        id description
+      }
+    } `;
     const data = await graphQLFetch(query, vars, showError);
     return data;
   }
@@ -38,7 +50,8 @@ export default class IssueList extends React.Component {
   constructor() {
     super();
     const issues = store.initialData ? store.initialData.issueList : null;
-    this.state = { issues, toastVisible: false, toastMessage: '' };
+    const selectedIssue = store.initialData ? store.initialData.issue : null;
+    this.state = { issues, selectedIssue, toastVisible: false, toastMessage: '' };
     this.closeIssue = this.closeIssue.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
     this.showMessage = this.showMessage.bind(this);
@@ -53,11 +66,17 @@ export default class IssueList extends React.Component {
   componentDidUpdate(prevProps) {
     const {
       location: { search: prevSearch },
+      match: {
+        params: { id: prevId },
+      },
     } = prevProps;
     const {
       location: { search },
+      match: {
+        params: { id },
+      },
     } = this.props;
-    if (prevSearch !== search) {
+    if (prevSearch !== search || prevId !== id) {
       this.loadData();
     }
   }
@@ -65,10 +84,11 @@ export default class IssueList extends React.Component {
   async loadData() {
     const {
       location: { search },
+      match,
     } = this.props;
-    const data = await IssueList.fetchData(null, search, this.showError);
+    const data = await IssueList.fetchData(match, search, this.showError);
     if (data) {
-      this.setState({ issues: data.issueList });
+      this.setState({ issues: data.issueList, selectedIssue: data.issue });
     }
   }
 
@@ -130,7 +150,7 @@ export default class IssueList extends React.Component {
   render() {
     const { issues, toastVisible, toastMessage } = this.state;
     if (issues == null) return null;
-    const { match } = this.props;
+    const { selectedIssue } = this.state;
     return (
       <>
         <Accordion defaultActiveKey="0">
@@ -146,7 +166,7 @@ export default class IssueList extends React.Component {
           </Card>
         </Accordion>
         <IssueTable issues={issues} closeIssue={this.closeIssue} deleteIssue={this.deleteIssue} />
-        <Route path={`${match.path}/:id`} component={IssueDetail} />
+        <IssueDetail issue={selectedIssue} />
         <Toast onClose={this.dismissToast} show={toastVisible} delay={3000} autohide>
           <Toast.Header>
             <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
