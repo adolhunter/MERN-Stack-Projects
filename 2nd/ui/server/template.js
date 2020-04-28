@@ -10,6 +10,7 @@ export default function template(body, data) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         table.table-hover tr {cursor: pointer;}
+        #filter-toggle {cursor: pointer;}
     </style>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/9daef59a2e.js" crossorigin="anonymous"></script>

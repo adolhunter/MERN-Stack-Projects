@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "fe604c3e3b1eb1247799";
+/******/ 	var hotCurrentHash = "dd2eb1e03ea427847f03";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -836,6 +836,7 @@ function template(body, data) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         table.table-hover tr {cursor: pointer;}
+        #filter-toggle {cursor: pointer;}
     </style>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/9daef59a2e.js" crossorigin="anonymous"></script>
