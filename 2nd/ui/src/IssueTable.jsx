@@ -35,7 +35,7 @@ const IssueRow = withRouter(({
         <Link to={`/edit/${issue.id}`}>
           <OverlayTrigger delayShow={1000} overlay={editTooltip}>
             <Button variant="light">
-              <i className="fas fa-edit" />
+              <i aria-hidden className="fas fa-edit" />
             </Button>
           </OverlayTrigger>
         </Link>
@@ -47,7 +47,7 @@ const IssueRow = withRouter(({
           overlay={<Tooltip>Close Issue</Tooltip>}
         >
           <Button variant="light" onClick={onClose}>
-            <i className="fas fa-check" />
+            <i aria-hidden className="fas fa-check" />
           </Button>
         </OverlayTrigger>
         {' '}
@@ -58,7 +58,7 @@ const IssueRow = withRouter(({
           overlay={<Tooltip>Delete Issue</Tooltip>}
         >
           <Button variant="light" onClick={onDelete}>
-            <i className="fas fa-trash-alt" />
+            <i aria-hidden className="fas fa-trash-alt" />
           </Button>
         </OverlayTrigger>
       </td>

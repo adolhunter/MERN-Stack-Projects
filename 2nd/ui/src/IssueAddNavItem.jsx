@@ -84,7 +84,7 @@ class IssueAddNavItem extends React.Component {
             delay={{ show: 250, hide: 400 }}
           >
             <Nav.Link>
-              <i className="fas fa-plus" />
+              <i aria-hidden className="fas fa-plus" />
             </Nav.Link>
           </OverlayTrigger>
         </Nav.Item>

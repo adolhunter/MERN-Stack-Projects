@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "dd2eb1e03ea427847f03";
+/******/ 	var hotCurrentHash = "a7ffc8508b4e1dee577d";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1247,6 +1247,7 @@ class IssueAddNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compo
         hide: 400
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"].Link, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      "aria-hidden": true,
       className: "fas fa-plus"
     })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"], {
       keyboard: true,
@@ -2329,6 +2330,7 @@ const IssueRow = Object(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["withRoute
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Button"], {
     variant: "light"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    "aria-hidden": true,
     className: "fas fa-edit"
   })))), ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["OverlayTrigger"], {
     delayShow: 1000,
@@ -2339,6 +2341,7 @@ const IssueRow = Object(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["withRoute
     variant: "light",
     onClick: onClose
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    "aria-hidden": true,
     className: "fas fa-check"
   }))), ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["OverlayTrigger"], {
     delayShow: 1000,
@@ -2349,6 +2352,7 @@ const IssueRow = Object(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["withRoute
     variant: "light",
     onClick: onDelete
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    "aria-hidden": true,
     className: "fas fa-trash-alt"
   })))));
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_bootstrap__WEBPACK_IMPORTED_MODULE_2__["LinkContainer"], {
@@ -2513,6 +2517,7 @@ function NavBar() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Nav"].Link, {
     href: "/about"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    "aria-hidden": true,
     className: "fas fa-info-circle"
   }))))));
 }
@@ -3002,5 +3007,4 @@ module.exports = require("webpack-node-externals");
 /***/ })
 
 /******/ });
-//# sourceMappingURL=server.js.map
 //# sourceMappingURL=server.js.map

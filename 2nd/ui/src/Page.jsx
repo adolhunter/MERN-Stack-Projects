@@ -20,7 +20,7 @@ function NavBar() {
         <Nav.Item>
           <OverlayTrigger placement="bottom" overlay={<Tooltip>about this app</Tooltip>}>
             <Nav.Link href="/about">
-              <i className="fas fa-info-circle" />
+              <i aria-hidden className="fas fa-info-circle" />
             </Nav.Link>
           </OverlayTrigger>
         </Nav.Item>
