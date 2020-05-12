@@ -160,7 +160,7 @@ export default class IssueList extends React.Component {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="0">
               <Card.Body>
-                <IssueFilter />
+                <IssueFilter urlBase="/issues" />
               </Card.Body>
             </Accordion.Collapse>
           </Card>
