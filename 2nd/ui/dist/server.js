@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "0b7143646d35795eab5c";
+/******/ 	var hotCurrentHash = "457f3ba8a727fbbe628f";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -2310,8 +2310,12 @@ class IssueReport extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component
     const stats = _store_js__WEBPACK_IMPORTED_MODULE_4__["default"].initialData ? _store_js__WEBPACK_IMPORTED_MODULE_4__["default"].initialData.issueCounts : null;
     delete _store_js__WEBPACK_IMPORTED_MODULE_4__["default"].initialData;
     this.state = {
-      stats
+      stats,
+      toastMessage: '',
+      toastVisible: false
     };
+    this.dismissToast = this.dismissToast.bind(this);
+    this.showMessage = this.showMessage.bind(this);
   }
 
   componentDidMount() {
@@ -2338,6 +2342,19 @@ class IssueReport extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component
     }
   }
 
+  showMessage(message) {
+    this.setState({
+      toastMessage: message,
+      toastVisible: true
+    });
+  }
+
+  dismissToast() {
+    this.setState({
+      toastVisible: false
+    });
+  }
+
   async loadData() {
     const {
       location: {
@@ -2357,7 +2374,9 @@ class IssueReport extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component
 
   render() {
     const {
-      stats
+      stats,
+      toastVisible,
+      toastMessage
     } = this.state;
     if (stats == null) return null;
     const headerColumns = statuses.map(status => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
@@ -2382,7 +2401,18 @@ class IssueReport extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component
       bordered: true,
       hover: true,
       responsive: true
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, " "), headerColumns)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, statRows)));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, " "), headerColumns)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, statRows)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Toast"], {
+      onClose: this.dismissToast,
+      show: toastVisible,
+      delay: 3000,
+      autohide: true
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Toast"].Header, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: "holder.js/20x20?text=%20",
+      className: "rounded mr-2",
+      alt: ""
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", {
+      className: "mr-auto"
+    }, "Update Status")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Toast"].Body, null, toastMessage)));
   }
 
 }

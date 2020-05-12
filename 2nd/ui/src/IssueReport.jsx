@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Card, Accordion } from 'react-bootstrap';
+import { Table, Card, Accordion, Toast } from 'react-bootstrap';
 
 import IssueFilter from './IssueFilter.jsx';
 import graphQLFetch from './graphQLFetch.js';
@@ -39,7 +39,9 @@ export default class IssueReport extends React.Component {
     super(props);
     const stats = store.initialData ? store.initialData.issueCounts : null;
     delete store.initialData;
-    this.state = { stats };
+    this.state = { stats, toastMessage: '', toastVisible: false };
+    this.dismissToast = this.dismissToast.bind(this);
+    this.showMessage = this.showMessage.bind(this);
   }
 
   componentDidMount() {
@@ -59,6 +61,14 @@ export default class IssueReport extends React.Component {
     }
   }
 
+  showMessage(message) {
+    this.setState({ toastMessage: message, toastVisible: true });
+  }
+
+  dismissToast() {
+    this.setState({ toastVisible: false });
+  }
+
   async loadData() {
     const {
       location: { search },
@@ -72,7 +82,7 @@ export default class IssueReport extends React.Component {
   }
 
   render() {
-    const { stats } = this.state;
+    const { stats, toastVisible, toastMessage } = this.state;
     if (stats == null) return null;
 
     const headerColumns = statuses.map((status) => <th key={status}>{status}</th>);
@@ -109,6 +119,13 @@ export default class IssueReport extends React.Component {
           </thead>
           <tbody>{statRows}</tbody>
         </Table>
+        <Toast onClose={this.dismissToast} show={toastVisible} delay={3000} autohide>
+          <Toast.Header>
+            <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
+            <strong className="mr-auto">Update Status</strong>
+          </Toast.Header>
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
       </>
     );
   }
