@@ -15,7 +15,8 @@
         "ecmaVersion": 2018
     },
     "rules": {
-        "no-console": "off"
+        "no-console": "off",
+        "object-curly-newline": "off"
     },
     "plugins": [
         "prettier"

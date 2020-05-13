@@ -36,8 +36,10 @@ export default class IssueList extends React.Component {
         effortMin: $effortMin
         effortMax: $effortMax
       ) {
+        issues {
         id title status owner
         created effort due
+        }
       }
       issue(id: $selectedId) @include (if : $hasSelection) {
         id description
@@ -49,7 +51,7 @@ export default class IssueList extends React.Component {
 
   constructor() {
     super();
-    const issues = store.initialData ? store.initialData.issueList : null;
+    const issues = store.initialData ? store.initialData.issueList.issues : null;
     const selectedIssue = store.initialData ? store.initialData.issue : null;
     this.state = { issues, selectedIssue, toastVisible: false, toastMessage: '' };
     this.closeIssue = this.closeIssue.bind(this);
@@ -88,7 +90,7 @@ export default class IssueList extends React.Component {
     } = this.props;
     const data = await IssueList.fetchData(match, search, this.showError);
     if (data) {
-      this.setState({ issues: data.issueList, selectedIssue: data.issue });
+      this.setState({ issues: data.issueList.issues, selectedIssue: data.issue });
     }
   }
 
