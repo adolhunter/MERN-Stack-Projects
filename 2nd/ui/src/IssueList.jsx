@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Accordion, Toast, Pagination } from 'react-bootstrap';
+import { Card, Accordion, Toast, Pagination, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import URLSearchParams from 'url-search-params';
 import IssueFilter from './IssueFilter.jsx';
@@ -162,8 +162,26 @@ export default class IssueList extends React.Component {
         newList.splice(index, 1);
         return { issues: newList };
       });
-      this.showMessage(`Deleted issue ${id} successfully!`);
+      const undoMesssage = (
+        <span>
+          {`Deleted issue ${id} successfully.`}
+          <Button variant="light" onClick={() => this.restoreIssue(id)}>Undo</Button>
+        </span>
+      );
+      this.showMessage(undoMesssage);
     } else {
+      this.loadData();
+    }
+  }
+
+  async restoreIssue(id) {
+    const query = `mutation issueRestore($id: Int!) {
+      issueRestore(id:$id)
+    }`;
+    const { showMessage } = this.props;
+    const data = await graphQLFetch(query, { id }, showMessage);
+    if (data) {
+      this.showMessage(`Issue ${id} restored successfully.`);
       this.loadData();
     }
   }
