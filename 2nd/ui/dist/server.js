@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "9344ac4eea59333ac109";
+/******/ 	var hotCurrentHash = "ace4db2d1707cbecbbcd";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -2837,7 +2837,6 @@ class SignInNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
     try {
       const auth2 = window.gapi.auth2.getAuthInstance();
       const googleUser = await auth2.signIn();
-      if (googleUser) console.log('success!');
       const givenName = googleUser.getBasicProfile().getGivenName();
       this.setState({
         user: {
@@ -2846,6 +2845,7 @@ class SignInNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
         }
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(`Error authenticating with Google: ${error.error}`);
     }
   }
@@ -2893,8 +2893,8 @@ class SignInNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
         placement: "bottom",
         overlay: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Tooltip"], null, "Sign Out"),
         delay: {
-          show: 250,
-          hide: 400
+          show: 100,
+          hide: 100
         }
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Nav"].Link, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         "aria-hidden": true,

@@ -33,10 +33,10 @@ export default class SignInNavItem extends React.Component {
     try {
       const auth2 = window.gapi.auth2.getAuthInstance();
       const googleUser = await auth2.signIn();
-      if (googleUser) console.log('success!');
       const givenName = googleUser.getBasicProfile().getGivenName();
       this.setState({ user: { signedIn: true, givenName } });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(`Error authenticating with Google: ${error.error}`);
     }
   }
@@ -67,7 +67,7 @@ export default class SignInNavItem extends React.Component {
           <OverlayTrigger
             placement="bottom"
             overlay={<Tooltip>Sign Out</Tooltip>}
-            delay={{ show: 250, hide: 400 }}
+            delay={{ show: 100, hide: 100 }}
           >
             <Nav.Link>
               <i aria-hidden className="fas fa-sign-out-alt" />
