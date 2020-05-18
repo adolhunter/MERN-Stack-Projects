@@ -2,6 +2,7 @@ import React from 'react';
 import { Navbar, Nav, OverlayTrigger, Tooltip, Container } from 'react-bootstrap';
 import IssueAddNavItem from './IssueAddNavItem.jsx';
 import Contents from './Contents.jsx';
+import SignInNavItem from './SignInNavItem.jsx';
 
 function NavBar() {
   return (
@@ -17,6 +18,7 @@ function NavBar() {
       </Navbar.Collapse>
       <Nav>
         <IssueAddNavItem />
+        <SignInNavItem />
         <Nav.Item>
           <OverlayTrigger placement="bottom" overlay={<Tooltip>about this app</Tooltip>}>
             <Nav.Link href="/about">
