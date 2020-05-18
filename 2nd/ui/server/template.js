@@ -13,6 +13,7 @@ export default function template(body, data) {
         #filter-toggle {cursor: pointer;}
     </style>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://kit.fontawesome.com/9daef59a2e.js" crossorigin="anonymous"></script>
     <title>My MERN Project</title>
 </head>

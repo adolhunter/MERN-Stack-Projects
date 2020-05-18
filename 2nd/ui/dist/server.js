@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "a1f1ff4d7c1099cf6e7b";
+/******/ 	var hotCurrentHash = "9344ac4eea59333ac109";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -839,6 +839,7 @@ function template(body, data) {
         #filter-toggle {cursor: pointer;}
     </style>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://kit.fontawesome.com/9daef59a2e.js" crossorigin="anonymous"></script>
     <title>My MERN Project</title>
 </head>
@@ -927,7 +928,8 @@ if (!process.env.UI_SERVER_API_ENDPOINT) {
 
 app.get('/env.js', (req, res) => {
   const env = {
-    UI_API_ENDPOINT: process.env.UI_API_ENDPOINT
+    UI_API_ENDPOINT: process.env.UI_API_ENDPOINT,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID
   };
   res.send(`window.ENV = ${JSON.stringify(env)}`);
 });
@@ -2804,7 +2806,8 @@ class SignInNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       user: {
         signedIn: false,
         givenName: ''
-      }
+      },
+      disabled: true
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -2812,14 +2815,39 @@ class SignInNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
     this.signIn = this.signIn.bind(this);
   }
 
-  signIn() {
-    this.hideModal();
-    this.setState({
-      user: {
-        signedIn: true,
-        givenName: 'User1'
+  componentDidMount() {
+    const clientId = window.ENV.GOOGLE_CLIENT_ID;
+    if (!clientId) return;
+    window.gapi.load('auth2', () => {
+      if (!window.gapi.auth2.getAuthInstance()) {
+        window.gapi.auth2.init({
+          client_id: clientId
+        }).then(() => {
+          this.setState({
+            disabled: false
+          });
+        });
       }
     });
+  }
+
+  async signIn() {
+    this.hideModal(); // const { showMessage } = this.props;
+
+    try {
+      const auth2 = window.gapi.auth2.getAuthInstance();
+      const googleUser = await auth2.signIn();
+      if (googleUser) console.log('success!');
+      const givenName = googleUser.getBasicProfile().getGivenName();
+      this.setState({
+        user: {
+          signedIn: true,
+          givenName
+        }
+      });
+    } catch (error) {
+      console.log(`Error authenticating with Google: ${error.error}`);
+    }
   }
 
   signOut() {
@@ -2832,6 +2860,13 @@ class SignInNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
   }
 
   showModal() {
+    const clientId = window.ENV.GOOGLE_CLIENT_ID; // const { showMessage } = this.props;
+
+    if (!clientId) {
+      //   showMessage('Missing environment variable GOOGLE_CLIENT_ID');
+      return;
+    }
+
     this.setState({
       showing: true
     });
@@ -2845,7 +2880,8 @@ class SignInNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
 
   render() {
     const {
-      user
+      user,
+      disabled
     } = this.state;
 
     if (user.signedIn) {
@@ -2888,10 +2924,14 @@ class SignInNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       closeButton: true
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Title, null, "Sign In")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
       variant: "primary",
+      disabled: disabled,
       onClick: this.signIn,
       size: "lg",
       block: true
-    }, "Sign In")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: "https://goo.gl/4yjp6B",
+      alt: "Sign In"
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
       variant: "link",
       onClick: this.hideModal
     }, "Cancel"))));
