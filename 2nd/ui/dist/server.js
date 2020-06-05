@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "ace4db2d1707cbecbbcd";
+/******/ 	var hotCurrentHash = "3809b65d1f355e1e52c8";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -916,6 +916,10 @@ if (apiProxyTarget) {
     target: apiProxyTarget,
     changeOrigin: true
   }));
+  app.use('/auth', Object(http_proxy_middleware__WEBPACK_IMPORTED_MODULE_2__["createProxyMiddleware"])({
+    target: apiProxyTarget,
+    changeOrigin: true
+  }));
 }
 
 if (!process.env.UI_API_ENDPOINT) {
@@ -926,9 +930,14 @@ if (!process.env.UI_SERVER_API_ENDPOINT) {
   process.env.UI_SERVER_API_ENDPOINT = process.env.UI_API_ENDPOINT;
 }
 
+if (!process.env.UI_AUTH_ENDPOINT) {
+  process.env.UI_AUTH_ENDPOINT = 'http://localhost:3000/auth';
+}
+
 app.get('/env.js', (req, res) => {
   const env = {
     UI_API_ENDPOINT: process.env.UI_API_ENDPOINT,
+    UI_AUTH_ENDPOINT: process.env.UI_AUTH_ENDPOINT,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID
   };
   res.send(`window.ENV = ${JSON.stringify(env)}`);
@@ -2832,21 +2841,43 @@ class SignInNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
   }
 
   async signIn() {
-    this.hideModal(); // const { showMessage } = this.props;
+    this.hideModal();
+    let googleToken; // const { showMessage } = this.props;
 
     try {
       const auth2 = window.gapi.auth2.getAuthInstance();
       const googleUser = await auth2.signIn();
-      const givenName = googleUser.getBasicProfile().getGivenName();
+      googleToken = googleUser.getAuthResponse().id_token;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(`Error authenticating with Google: ${error.error}`);
+    }
+
+    try {
+      const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+      const response = await fetch(`${apiEndpoint}/signin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          google_token: googleToken
+        })
+      });
+      const body = await response.text();
+      const result = JSON.parse(body);
+      const {
+        signedIn,
+        givenName
+      } = result;
       this.setState({
         user: {
-          signedIn: true,
+          signedIn,
           givenName
         }
       });
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(`Error authenticating with Google: ${error.error}`);
+      console.log(`Error signing into the app: ${error}`);
     }
   }
 
