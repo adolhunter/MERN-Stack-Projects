@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "3809b65d1f355e1e52c8";
+/******/ 	var hotCurrentHash = "e375c1bc2bd120b187e2";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -2824,7 +2824,7 @@ class SignInNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
     this.signIn = this.signIn.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const clientId = window.ENV.GOOGLE_CLIENT_ID;
     if (!clientId) return;
     window.gapi.load('auth2', () => {
@@ -2836,6 +2836,26 @@ class SignInNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
             disabled: false
           });
         });
+      }
+    });
+    await this.loadData();
+  }
+
+  async loadData() {
+    const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+    const response = await fetch(`${apiEndpoint}/user`, {
+      method: 'POST'
+    });
+    const body = await response.text();
+    const result = JSON.parse(body);
+    const {
+      signedIn,
+      givenName
+    } = result;
+    this.setState({
+      user: {
+        signedIn,
+        givenName
       }
     });
   }
@@ -3441,4 +3461,5 @@ module.exports = require("webpack-node-externals");
 /***/ })
 
 /******/ });
+//# sourceMappingURL=server.js.map
 //# sourceMappingURL=server.js.map
