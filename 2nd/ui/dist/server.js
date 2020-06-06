@@ -22,7 +22,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "e375c1bc2bd120b187e2";
+/******/ 	var hotCurrentHash = "b0c8f98faf4d21d18201";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -2901,13 +2901,24 @@ class SignInNavItem extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
     }
   }
 
-  signOut() {
-    this.setState({
-      user: {
-        signedIn: false,
-        givenName: ''
-      }
-    });
+  async signOut() {
+    const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+
+    try {
+      await fetch(`${apiEndpoint}/signout`, {
+        method: 'POST'
+      });
+      const auth2 = window.gapi.auth2.getAuthInstance();
+      await auth2.signOut();
+      this.setState({
+        user: {
+          signedIn: false,
+          givenName: ''
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   showModal() {
@@ -3461,5 +3472,4 @@ module.exports = require("webpack-node-externals");
 /***/ })
 
 /******/ });
-//# sourceMappingURL=server.js.map
 //# sourceMappingURL=server.js.map
