@@ -74,6 +74,7 @@ class IssueAddNavItem extends React.Component {
 
   render() {
     const { showing } = this.state;
+    const { user: { signedIn } } = this.props;
     const { toastVisible, toastMessage } = this.state;
     return (
       <>
@@ -83,7 +84,7 @@ class IssueAddNavItem extends React.Component {
             overlay={<Tooltip>Create Issue</Tooltip>}
             delay={{ show: 250, hide: 400 }}
           >
-            <Nav.Link>
+            <Nav.Link disabled={!signedIn}>
               <i aria-hidden className="fas fa-plus" />
             </Nav.Link>
           </OverlayTrigger>
