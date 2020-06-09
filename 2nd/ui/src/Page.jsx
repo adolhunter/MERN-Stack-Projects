@@ -3,6 +3,7 @@ import { Navbar, Nav, OverlayTrigger, Tooltip, Container } from 'react-bootstrap
 import IssueAddNavItem from './IssueAddNavItem.jsx';
 import Contents from './Contents.jsx';
 import SignInNavItem from './SignInNavItem.jsx';
+import UserContext from './UserContext.js';
 
 function NavBar({ user, onUserChange }) {
   return (
@@ -73,7 +74,9 @@ export default class Page extends React.Component {
       <div>
         <NavBar user={user} onUserChange={this.onUserChange} />
         <Container fluid>
-          <Contents />
+          <UserContext.Provider value={user}>
+            <Contents />
+          </UserContext.Provider>
         </Container>
         <Footer />
       </div>

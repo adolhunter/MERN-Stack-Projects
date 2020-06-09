@@ -17,6 +17,7 @@ import graphQLFetch from './graphQLFetch.js';
 import NumInput from './NumInput.jsx';
 import DateInput from './DateInput.jsx';
 import TextInput from './TextInput.jsx';
+import UserContext from './UserContext.js';
 
 export default class IssueEdit extends React.Component {
   static async fetchData(match, search, showError) {
@@ -182,6 +183,7 @@ export default class IssueEdit extends React.Component {
       issue: { created, due },
     } = this.state;
     const { toastVisible, toastMessage } = this.state;
+    const user = this.context;
 
     return (
       <Card>
@@ -294,7 +296,7 @@ export default class IssueEdit extends React.Component {
             <Form.Group as={Row}>
               <Col sm={{ span: 6, offset: 3 }}>
                 <ButtonToolbar>
-                  <Button variant="primary" type="submit">
+                  <Button variant="primary" type="submit" disabled={!user.signedIn}>
                     Submit
                   </Button>
                   <Link to="/issues">
@@ -328,80 +330,4 @@ export default class IssueEdit extends React.Component {
     );
   }
 }
-
-// <form onSubmit={this.handleSubmit}>
-//   <h3>{`Editing issue: ${id}`}</h3>
-//   <table>
-//     <tbody>
-//       <tr>
-//         <td>Created:</td>
-//         <td>{created.toDateString()}</td>
-//       </tr>
-//       <tr>
-//         <td>Status:</td>
-//         <td>
-//           <select name="status" value={status} onChange={this.onChange}>
-//             <option value="New">New</option>
-//             <option value="Assigned">Assigned</option>
-//             <option value="Fixed">Fixed</option>
-//             <option value="Closed">Closed</option>
-//           </select>
-//         </td>
-//       </tr>
-//       <tr>
-//         <td>Owner:</td>
-//         <td>
-//           <TextInput name="owner" value={owner} onChange={this.onChange} key={id} />
-//         </td>
-//       </tr>
-//       <tr>
-//         <td>Effort:</td>
-//         <td>
-//           <NumInput name="effort" value={effort} onChange={this.onChange} key={id} />
-//         </td>
-//       </tr>
-//       <tr>
-//         <td>Due:</td>
-//         <td>
-//           <DateInput
-//             name="due"
-//             value={due}
-//             onChange={this.onChange}
-//             onValidityChange={this.onValidityChange}
-//             key={id}
-//           />
-//         </td>
-//       </tr>
-//       <tr>
-//         <td>Title:</td>
-//         <td>
-//           <TextInput size={50} name="title" value={title} onChange={this.onChange} key={id} />
-//         </td>
-//       </tr>
-//       <tr>
-//         <td>Description:</td>
-//         <td>
-//           <TextInput
-//             tag="textarea"
-//             rows={8}
-//             cols={50}
-//             name="description"
-//             value={description}
-//             onChange={this.onChange}
-//             key={id}
-//           />
-//         </td>
-//       </tr>
-//       <tr>
-//         <td />
-//         <td>
-//           <button type="submit">Submit</button>
-//         </td>
-//       </tr>
-//     </tbody>
-//   </table>
-//   {validationMessage}
-//   <Link to={`/edit/${id - 1}`}>Prev</Link>
-//   {' | '}
-//   <Link to={`/edit/${id + 1}`}>Next</Link>
-// </form>
+IssueEdit.contextType = UserContext;
