@@ -3,6 +3,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const { AuthenticationError } = require('apollo-server-express');
 const { OAuth2Client } = require('google-auth-library');
+const cors = require('cors');
 
 let { JWT_SECRET } = process.env;
 
@@ -17,6 +18,8 @@ if (!JWT_SECRET) {
 const routes = new Router();
 
 routes.use(express.json());
+const origin = process.env.UI_SERVER_ORIGIN || 'http://localhost:8000';
+routes.use(cors({ origin, credentials: true }));
 
 function getUser(req) {
   const token = req.cookies.jwt;
